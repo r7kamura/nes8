@@ -38,6 +38,11 @@ export default class Cpu {
     this.handleReset();
   }
 
+  private branch(address: Uint16) {
+    this.branched = true;
+    this.registers.programCounter = address;
+  }
+
   // @todo
   private execute(operand: Uint8, addressingMode: AddressingMode, operationName: OperationName) {}
 
