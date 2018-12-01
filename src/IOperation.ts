@@ -1,4 +1,4 @@
-import AddressingMode from "./addressingMode";
+import AddressingMode from "./AddressingMode";
 import OperationName from "./OperationName";
 
 export default interface IOperation {

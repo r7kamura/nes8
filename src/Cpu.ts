@@ -1,8 +1,8 @@
-import AddressingMode from "./addressingMode";
-import CpuBus from "./cpuBus";
-import CpuRegisters from "./cpuRegisters";
-import InterruptLine from "./interruptLine";
-import IOperation from "./ioperation";
+import AddressingMode from "./AddressingMode";
+import CpuBus from "./CpuBus";
+import CpuRegisters from "./CpuRegisters";
+import InterruptLine from "./InterruptLine";
+import IOperation from "./IOperation";
 import OperationName from "./OperationName";
 import operations from "./operations";
 import { Uint16, Uint8 } from "./types";

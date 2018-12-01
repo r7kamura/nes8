@@ -1,4 +1,4 @@
-import IOperation from "./ioperation";
+import IOperation from "./IOperation";
 
 const operations: Array<IOperation | null> = [
   {

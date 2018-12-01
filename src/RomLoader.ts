@@ -1,5 +1,5 @@
-import InesHeader from "./inesHeader";
-import Rom from "./rom";
+import InesHeader from "./InesHeader";
+import Rom from "./Rom";
 
 export default class RomLoader {
   public bytes: Uint8Array;

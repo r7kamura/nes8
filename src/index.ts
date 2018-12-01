@@ -1,3 +1,3 @@
-import Emulator from "./emulator";
+import Emulator from "./Emulator";
 
 new Emulator().run();

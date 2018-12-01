@@ -1,10 +1,10 @@
-import Cpu from "./cpu";
-import CpuBus from "./cpuBus";
-import DmaController from "./dmaController";
-import PartsFactory from "./partsFactory";
-import Ppu from "./ppu";
-import PpuBus from "./ppuBus";
-import RomLoader from "./romLoader";
+import Cpu from "./Cpu";
+import CpuBus from "./CpuBus";
+import DmaController from "./DmaController";
+import PartsFactory from "./PartsFactory";
+import Ppu from "./Ppu";
+import PpuBus from "./PpuBus";
+import RomLoader from "./RomLoader";
 
 export default class Emulator {
   public cpu: Cpu;
