@@ -6,5 +6,7 @@ export default interface Operation {
 
   cycle: number;
 
+  fullName: string;
+
   name: OperationName;
 }

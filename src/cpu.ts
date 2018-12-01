@@ -3,7 +3,8 @@ import CpuBus from './cpuBus';
 import CpuRegisters from './cpuRegisters';
 import InterruptLine from './interruptLine';
 import Operation from './operation';
-import OperationName from './OperationName';
+import OperationName from './operationName';
+import operations from './operations'
 import { Uint8, Uint16 } from './types';
 
 export default class Cpu {
@@ -46,18 +47,23 @@ export default class Cpu {
   // @todo
   private execute(operand: Uint8, addressingMode: AddressingMode, operationName: OperationName) {}
 
+  private fetch(): Uint16 {
+    return this.read(this.registers.programCounter++);
+  }
+
   // @todo
   private fetchOperand(addressingMode: AddressingMode): Uint8 {
     return 0;
   }
 
-  // @todo
   private fetchOperation(): Operation {
-    return {
-      addressingMode: 'immediate',
-      cycle: 1,
-      name: 'LDA',
-    };
+    const opcode = this.fetch();
+    const operation = operations[opcode];
+    if (operation) {
+      return operation;
+    } else {
+      throw new Error(`Unknown opcode: ${opcode}`);
+    }
   }
 
   // @todo
