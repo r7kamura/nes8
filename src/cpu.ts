@@ -86,7 +86,9 @@ export default class Cpu {
   }
 
   private readWord(address: Uint16): Uint16 {
-    return this.read(address) | (this.read((address + 1) & 0xFFFF) << 8);
+    const low = this.read(address);
+    const high = this.read((address + 1) & 0xFF);
+    return low + (high << 8);
   }
 
   private scanIrqAndNmi() {
