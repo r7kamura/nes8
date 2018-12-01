@@ -1,0 +1,19 @@
+{
+  "name": "nes8",
+  "version": "0.1.0",
+  "description": "A NES emulator written in TypeScript.",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r7kamura/nes8.git"
+  },
+  "keywords": [
+    "nes"
+  ],
+  "author": "Ryo Nakamura",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/r7kamura/nes8/issues"
+  },
+  "homepage": "https://github.com/r7kamura/nes8#readme"
+}
