@@ -32,44 +32,44 @@ export default class CpuRegisters {
     return this.maskStatusBit(StatusIndex.Break);
   }
 
-  get carry(): boolean {
-    return this.maskStatusBit(StatusIndex.Carry);
-  }
-
-  get interrupt(): boolean {
-    return this.maskStatusBit(StatusIndex.Interrupt);
-  }
-
-  get negative(): boolean {
-    return this.maskStatusBit(StatusIndex.Negative);
-  }
-
-  get overflow(): boolean {
-    return this.maskStatusBit(StatusIndex.Overflow);
-  }
-
-  get zero(): boolean {
-    return this.maskStatusBit(StatusIndex.Zero);
-  }
-
   set break(value: boolean) {
     this.toggleStatusBit(StatusIndex.Break, value);
+  }
+
+  get carry(): boolean {
+    return this.maskStatusBit(StatusIndex.Carry);
   }
 
   set carry(value: boolean) {
     this.toggleStatusBit(StatusIndex.Carry, value);
   }
 
+  get interrupt(): boolean {
+    return this.maskStatusBit(StatusIndex.Interrupt);
+  }
+
   set interrupt(value: boolean) {
     this.toggleStatusBit(StatusIndex.Interrupt, value);
+  }
+
+  get negative(): boolean {
+    return this.maskStatusBit(StatusIndex.Negative);
   }
 
   set negative(value: boolean) {
     this.toggleStatusBit(StatusIndex.Negative, value);
   }
 
+  get overflow(): boolean {
+    return this.maskStatusBit(StatusIndex.Overflow);
+  }
+
   set overflow(value: boolean) {
     this.toggleStatusBit(StatusIndex.Overflow, value);
+  }
+
+  get zero(): boolean {
+    return this.maskStatusBit(StatusIndex.Zero);
   }
 
   set zero(value: boolean) {

@@ -1,7 +1,7 @@
 import AddressingMode from "./addressingMode";
 import OperationName from "./OperationName";
 
-export default interface Operation {
+export default interface IOperation {
   addressingMode: AddressingMode;
 
   cycle: number;

@@ -7,38 +7,39 @@ import PpuBus from "./ppuBus";
 import Ram from "./ram";
 
 export default class PartsFactory {
-  public _cpu?: Cpu;
+  public cachedCpu?: Cpu;
 
-  public _cpuBus?: CpuBus;
+  public cachedCpuBus?: CpuBus;
 
-  public _characterRam?: Ram;
+  public cachedCharacterRam?: Ram;
 
-  public _dmaController?: DmaController;
+  public cachedDmaController?: DmaController;
 
-  public _interruptLine?: InterruptLine;
+  public cachedInterruptLine?: InterruptLine;
 
-  public _ppu?: Ppu;
+  public cachedPpu?: Ppu;
 
-  public _ppuBus?: PpuBus;
+  public cachedPpuBus?: PpuBus;
 
-  public _videoRam?: Ram;
+  public cachedVideoRam?: Ram;
 
-  public _workingRam?: Ram;
+  public cachedWorkingRam?: Ram;
 
   public characterRam(): Ram {
-    return this._characterRam || (this._characterRam = new Ram(4096));
+    return this.cachedCharacterRam || (this.cachedCharacterRam = new Ram(4096));
   }
 
   public cpu(): Cpu {
     return (
-      this._cpu || (this._cpu = new Cpu(this.cpuBus(), this.interruptLine()))
+      this.cachedCpu ||
+      (this.cachedCpu = new Cpu(this.cpuBus(), this.interruptLine()))
     );
   }
 
   public cpuBus(): CpuBus {
     return (
-      this._cpuBus ||
-      (this._cpuBus = new CpuBus(
+      this.cachedCpuBus ||
+      (this.cachedCpuBus = new CpuBus(
         this.dmaController(),
         this.ppu(),
         this.workingRam()
@@ -48,33 +49,40 @@ export default class PartsFactory {
 
   public dmaController(): DmaController {
     return (
-      this._dmaController ||
-      (this._dmaController = new DmaController(this.ppu(), this.workingRam()))
+      this.cachedDmaController ||
+      (this.cachedDmaController = new DmaController(
+        this.ppu(),
+        this.workingRam()
+      ))
     );
   }
 
   public interruptLine(): InterruptLine {
-    return this._interruptLine || (this._interruptLine = new InterruptLine());
+    return (
+      this.cachedInterruptLine ||
+      (this.cachedInterruptLine = new InterruptLine())
+    );
   }
 
   public ppu(): Ppu {
     return (
-      this._ppu || (this._ppu = new Ppu(this.ppuBus(), this.interruptLine()))
+      this.cachedPpu ||
+      (this.cachedPpu = new Ppu(this.ppuBus(), this.interruptLine()))
     );
   }
 
   public ppuBus(): PpuBus {
     return (
-      this._ppuBus ||
-      (this._ppuBus = new PpuBus(this.characterRam(), this.videoRam()))
+      this.cachedPpuBus ||
+      (this.cachedPpuBus = new PpuBus(this.characterRam(), this.videoRam()))
     );
   }
 
   public videoRam(): Ram {
-    return this._videoRam || (this._videoRam = new Ram(8192));
+    return this.cachedVideoRam || (this.cachedVideoRam = new Ram(8192));
   }
 
   public workingRam(): Ram {
-    return this._workingRam || (this._workingRam = new Ram(2048));
+    return this.cachedWorkingRam || (this.cachedWorkingRam = new Ram(2048));
   }
 }

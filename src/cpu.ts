@@ -2,7 +2,7 @@ import AddressingMode from "./addressingMode";
 import CpuBus from "./cpuBus";
 import CpuRegisters from "./cpuRegisters";
 import InterruptLine from "./interruptLine";
-import Operation from "./operation";
+import IOperation from "./ioperation";
 import OperationName from "./OperationName";
 import operations from "./operations";
 import { Uint16, Uint8 } from "./types";
@@ -45,12 +45,13 @@ export default class Cpu {
     this.registers.programCounter = address;
   }
 
-  // @todo
   private execute(
     operand: Uint8 | undefined,
     addressingMode: AddressingMode,
     operationName: OperationName
-  ) {}
+  ) {
+    // TODO
+  }
 
   private fetch(): Uint16 {
     return this.read(this.registers.programCounter++);
@@ -121,7 +122,7 @@ export default class Cpu {
     }
   }
 
-  private fetchOperation(): Operation {
+  private fetchOperation(): IOperation {
     const opcode = this.fetch();
     const operation = operations[opcode];
     if (operation) {
@@ -135,11 +136,13 @@ export default class Cpu {
     return this.fetch() | (this.fetch() << 8);
   }
 
-  // @todo
-  private handleIrq() {}
+  private handleIrq() {
+    // TODO
+  }
 
-  // @todo
-  private handleNmi() {}
+  private handleNmi() {
+    // TODO
+  }
 
   private handleReset() {
     this.registers.accumulator = 0;

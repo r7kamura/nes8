@@ -4,5 +4,7 @@ import Ram from "./ram";
 export default class DmaController {
   constructor(private ppu: Ppu, private workingRam: Ram) {}
 
-  public transferIfRequested() {}
+  public transferIfRequested() {
+    // TODO
+  }
 }

@@ -17,5 +17,7 @@ export default class PpuBus {
   }
 
   // @todo
-  public write(address: Uint16, value: Uint8) {}
+  public write(address: Uint16, value: Uint8) {
+    // TODO
+  }
 }

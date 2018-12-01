@@ -18,6 +18,7 @@ export default class CpuBus {
     return 0;
   }
 
-  // @todo
-  public write(address: Uint16, value: Uint8) {}
+  public write(address: Uint16, value: Uint8) {
+    // TODO
+  }
 }
