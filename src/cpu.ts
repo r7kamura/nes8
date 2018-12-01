@@ -11,6 +11,7 @@ export default class Cpu {
   }
 
   // @todo
+  // @returns {number} Cycles count elapsed in this step.
   step(): number {
     this.scanIrqAndNmi();
     return 1;
