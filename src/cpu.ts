@@ -1,24 +1,57 @@
+import AddressingMode from './addressingMode';
 import CpuBus from './cpuBus';
 import CpuRegisters from './cpuRegisters';
 import InterruptLine from './interruptLine';
+import Operation from './operation';
 import { Uint8, Uint16 } from './types';
 
 export default class Cpu {
+  branched: boolean;
+
+  crossed: boolean;
+
   registers: CpuRegisters;
 
   constructor(private bus: CpuBus, private interruptLine: InterruptLine) {
+    this.branched = false;
+    this.crossed = false;
     this.registers = new CpuRegisters();
   }
 
-  // @todo
   // @returns {number} Cycles count elapsed in this step.
   step(): number {
     this.scanIrqAndNmi();
-    return 1;
+    const operation = this.fetchOperation();
+    this.execute(
+      this.fetchOperand(operation.addressingMode),
+      operation.addressingMode,
+      operation.name
+    );
+    const cyclesCount = operation.cycle + (this.branched ? 1 : 0) + (this.crossed ? 1 : 0);
+    this.branched = false;
+    this.crossed = false;
+    return cyclesCount;
   }
 
   reset() {
     this.handleReset();
+  }
+
+  // @todo
+  private execute(operand: Uint8, addressingMode: AddressingMode, operationName: string) {}
+
+  // @todo
+  private fetchOperand(addressingMode: AddressingMode): Uint8 {
+    return 0;
+  }
+
+  // @todo
+  private fetchOperation(): Operation {
+    return {
+      addressingMode: 'immediate',
+      cycle: 1,
+      name: 'dummy',
+    };
   }
 
   // @todo
