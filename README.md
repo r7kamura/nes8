@@ -1,5 +1,7 @@
 # Nes8
 
+[![CircleCI](https://circleci.com/gh/r7kamura/nes8.svg?style=svg)](https://circleci.com/gh/r7kamura/workflows/nes8)
+
 A NES emulator written in TypeScript.
 
 ## Development
