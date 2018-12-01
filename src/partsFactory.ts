@@ -1,6 +1,7 @@
 import Cpu from './cpu';
 import CpuBus from './cpuBus';
 import DmaController from './dmaController';
+import InterruptLine from './interruptLine';
 import Ppu from './ppu';
 import PpuBus from './ppuBus';
 import Ram from './ram';
@@ -13,6 +14,8 @@ export default class PartsFactory {
   _characterRam?: Ram;
 
   _dmaController?: DmaController;
+
+  _interruptLine?: InterruptLine;
 
   _ppu?: Ppu;
 
@@ -27,7 +30,7 @@ export default class PartsFactory {
   }
 
   cpu(): Cpu {
-    return this._cpu || (this._cpu = new Cpu(this.cpuBus()));
+    return this._cpu || (this._cpu = new Cpu(this.cpuBus(), this.interruptLine()));
   }
 
   cpuBus(): CpuBus {
@@ -38,8 +41,12 @@ export default class PartsFactory {
     return this._dmaController || (this._dmaController = new DmaController(this.ppu(), this.workingRam()));
   }
 
+  interruptLine(): InterruptLine {
+    return this._interruptLine || (this._interruptLine = new InterruptLine());
+  }
+
   ppu(): Ppu {
-    return this._ppu || (this._ppu = new Ppu(this.ppuBus()));
+    return this._ppu || (this._ppu = new Ppu(this.ppuBus(), this.interruptLine()));
   }
 
   ppuBus(): PpuBus {

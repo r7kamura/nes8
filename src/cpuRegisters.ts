@@ -80,15 +80,6 @@ export default class CpuRegisters {
     return (this.status & (1 << index)) !== 0;
   }
 
-  reset() {
-    this.accumulator = 0;
-    this.indexX = 0;
-    this.indexY = 0;
-    this.programCounter = 0;
-    this.stackPointer = 0x01FD;
-    this.status = 0b00110100;
-  }
-
   private toggleStatusBit(index: StatusIndex, value: boolean) {
     const maskedByte = (1 << index);
     if (value) {
