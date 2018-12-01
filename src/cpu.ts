@@ -3,7 +3,7 @@ import CpuBus from './cpuBus';
 import CpuRegisters from './cpuRegisters';
 import InterruptLine from './interruptLine';
 import Operation from './operation';
-import OperationName from './operationName';
+import OperationName from './OperationName';
 import operations from './operations'
 import { Uint8, Uint16 } from './types';
 
