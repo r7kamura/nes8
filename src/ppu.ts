@@ -4,5 +4,5 @@ import PpuBus from "./ppuBus";
 export default class Ppu {
   constructor(private bus: PpuBus, private interruptLine: InterruptLine) {}
 
-  step() {}
+  public step() {}
 }

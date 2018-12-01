@@ -1,4 +1,4 @@
-import { Uint8, Uint16 } from "./types";
+import { Uint16, Uint8 } from "./types";
 
 export default class Rom {
   constructor(private bytes: Uint8Array) {}
@@ -7,7 +7,7 @@ export default class Rom {
     return this.bytes.length;
   }
 
-  read(address: Uint16): Uint8 {
+  public read(address: Uint16): Uint8 {
     return this.bytes[address];
   }
 }

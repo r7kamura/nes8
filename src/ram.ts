@@ -1,17 +1,17 @@
-import { Uint8, Uint16 } from "./types";
+import { Uint16, Uint8 } from "./types";
 
 export default class Ram {
-  bytes: Uint8Array;
+  public bytes: Uint8Array;
 
   constructor(bytesize: number) {
     this.bytes = new Uint8Array(bytesize);
   }
 
-  read(address: Uint16): Uint8 {
+  public read(address: Uint16): Uint8 {
     return this.bytes[address];
   }
 
-  write(address: Uint16, value: Uint8) {
+  public write(address: Uint16, value: Uint8) {
     return (this.bytes[address] = value);
   }
 }

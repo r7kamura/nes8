@@ -1,6 +1,6 @@
 import Ram from "./ram";
 import Rom from "./rom";
-import { Uint8, Uint16 } from "./types";
+import { Uint16, Uint8 } from "./types";
 
 export default class PpuBus {
   constructor(public characterRam: Ram, public videoRam: Ram) {}
@@ -12,10 +12,10 @@ export default class PpuBus {
   }
 
   // @todo
-  read(address: Uint16): Uint8 {
+  public read(address: Uint16): Uint8 {
     return 0;
   }
 
   // @todo
-  write(address: Uint16, value: Uint8) {}
+  public write(address: Uint16, value: Uint8) {}
 }

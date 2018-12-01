@@ -5,14 +5,14 @@ import InterruptLine from "./interruptLine";
 import Operation from "./operation";
 import OperationName from "./OperationName";
 import operations from "./operations";
-import { Uint8, Uint16 } from "./types";
+import { Uint16, Uint8 } from "./types";
 
 export default class Cpu {
-  branched: boolean;
+  public branched: boolean;
 
-  crossed: boolean;
+  public crossed: boolean;
 
-  registers: CpuRegisters;
+  public registers: CpuRegisters;
 
   constructor(private bus: CpuBus, private interruptLine: InterruptLine) {
     this.branched = false;
@@ -21,7 +21,7 @@ export default class Cpu {
   }
 
   // @returns {number} Cycles count elapsed in this step.
-  step(): number {
+  public step(): number {
     this.scanIrqAndNmi();
     const operation = this.fetchOperation();
     this.execute(
@@ -36,7 +36,7 @@ export default class Cpu {
     return cyclesCount;
   }
 
-  reset() {
+  public reset() {
     this.handleReset();
   }
 

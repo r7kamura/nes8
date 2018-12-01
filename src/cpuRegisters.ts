@@ -1,4 +1,4 @@
-import { Uint8, Uint16 } from "./types";
+import { Uint16, Uint8 } from "./types";
 
 const enum StatusIndex {
   Carry,
@@ -12,12 +12,12 @@ const enum StatusIndex {
 }
 
 export default class CpuRegisters {
-  accumulator: Uint8;
-  indexX: Uint8;
-  indexY: Uint8;
-  programCounter: Uint16;
-  stackPointer: Uint16;
-  status: Uint8;
+  public accumulator: Uint8;
+  public indexX: Uint8;
+  public indexY: Uint8;
+  public programCounter: Uint16;
+  public stackPointer: Uint16;
+  public status: Uint8;
 
   constructor() {
     this.accumulator = 0;

@@ -7,15 +7,15 @@ import PpuBus from "./ppuBus";
 import RomLoader from "./romLoader";
 
 export default class Emulator {
-  cpu: Cpu;
+  public cpu: Cpu;
 
-  cpuBus: CpuBus;
+  public cpuBus: CpuBus;
 
-  dmaController: DmaController;
+  public dmaController: DmaController;
 
-  ppu: Ppu;
+  public ppu: Ppu;
 
-  ppuBus: PpuBus;
+  public ppuBus: PpuBus;
 
   constructor() {
     const partsFactory = new PartsFactory();
@@ -26,13 +26,13 @@ export default class Emulator {
     this.ppuBus = partsFactory.ppuBus();
   }
 
-  load(buffer: ArrayBuffer) {
+  public load(buffer: ArrayBuffer) {
     const romLoader = new RomLoader(buffer);
     this.ppuBus.characterRom = romLoader.characterRom();
     this.cpuBus.programRom = romLoader.programRom();
   }
 
-  run() {
+  public run() {
     this.cpu.reset();
     while (true) {
       this.step();

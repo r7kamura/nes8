@@ -2,20 +2,20 @@ import InesHeader from "./inesHeader";
 import Rom from "./rom";
 
 export default class RomLoader {
-  bytes: Uint8Array;
+  public bytes: Uint8Array;
 
-  inesHeader: InesHeader;
+  public inesHeader: InesHeader;
 
-  constructor(buffer: ArrayBuffer) {
+  public constructor(buffer: ArrayBuffer) {
     this.bytes = new Uint8Array(buffer);
     this.inesHeader = new InesHeader(this.bytes);
   }
 
-  characterRom(): Rom {
+  public characterRom(): Rom {
     return new Rom(this.characterRomBytes());
   }
 
-  programRom(): Rom {
+  public programRom(): Rom {
     return new Rom(this.programRomBytes());
   }
 
