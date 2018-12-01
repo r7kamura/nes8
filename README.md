@@ -20,6 +20,18 @@ npm run build
 
 TBD.
 
+### Format source code
+
+```
+npm run format
+```
+
+### Lint source code
+
+```
+npm run lint
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/r7kamura/nes8.
