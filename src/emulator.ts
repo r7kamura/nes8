@@ -1,6 +1,6 @@
 import Cpu from './cpu';
-import Ppu from './ppu';
 import DmaController from './dmaController';
+import Ppu from './ppu';
 
 export default class Emulator {
   cpu: Cpu;
