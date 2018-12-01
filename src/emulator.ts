@@ -1,10 +1,10 @@
-import Cpu from './cpu';
-import CpuBus from './cpuBus';
-import DmaController from './dmaController';
-import PartsFactory from './partsFactory';
-import Ppu from './ppu';
-import PpuBus from './ppuBus';
-import RomLoader from './romLoader';
+import Cpu from "./cpu";
+import CpuBus from "./cpuBus";
+import DmaController from "./dmaController";
+import PartsFactory from "./partsFactory";
+import Ppu from "./ppu";
+import PpuBus from "./ppuBus";
+import RomLoader from "./romLoader";
 
 export default class Emulator {
   cpu: Cpu;
@@ -34,14 +34,14 @@ export default class Emulator {
 
   run() {
     this.cpu.reset();
-    while(true) {
+    while (true) {
       this.step();
     }
   }
 
   private step() {
     this.dmaController.transferIfRequested();
-    const cyclesCount = this.cpu.step()
+    const cyclesCount = this.cpu.step();
     for (let i = 0; i < cyclesCount * 3; i++) {
       this.ppu.step();
     }

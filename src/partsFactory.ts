@@ -1,10 +1,10 @@
-import Cpu from './cpu';
-import CpuBus from './cpuBus';
-import DmaController from './dmaController';
-import InterruptLine from './interruptLine';
-import Ppu from './ppu';
-import PpuBus from './ppuBus';
-import Ram from './ram';
+import Cpu from "./cpu";
+import CpuBus from "./cpuBus";
+import DmaController from "./dmaController";
+import InterruptLine from "./interruptLine";
+import Ppu from "./ppu";
+import PpuBus from "./ppuBus";
+import Ram from "./ram";
 
 export default class PartsFactory {
   _cpu?: Cpu;
@@ -30,15 +30,27 @@ export default class PartsFactory {
   }
 
   cpu(): Cpu {
-    return this._cpu || (this._cpu = new Cpu(this.cpuBus(), this.interruptLine()));
+    return (
+      this._cpu || (this._cpu = new Cpu(this.cpuBus(), this.interruptLine()))
+    );
   }
 
   cpuBus(): CpuBus {
-    return this._cpuBus || (this._cpuBus = new CpuBus(this.dmaController(), this.ppu(), this.workingRam()));
+    return (
+      this._cpuBus ||
+      (this._cpuBus = new CpuBus(
+        this.dmaController(),
+        this.ppu(),
+        this.workingRam()
+      ))
+    );
   }
 
   dmaController(): DmaController {
-    return this._dmaController || (this._dmaController = new DmaController(this.ppu(), this.workingRam()));
+    return (
+      this._dmaController ||
+      (this._dmaController = new DmaController(this.ppu(), this.workingRam()))
+    );
   }
 
   interruptLine(): InterruptLine {
@@ -46,11 +58,16 @@ export default class PartsFactory {
   }
 
   ppu(): Ppu {
-    return this._ppu || (this._ppu = new Ppu(this.ppuBus(), this.interruptLine()));
+    return (
+      this._ppu || (this._ppu = new Ppu(this.ppuBus(), this.interruptLine()))
+    );
   }
 
   ppuBus(): PpuBus {
-    return this._ppuBus || (this._ppuBus = new PpuBus(this.characterRam(), this.videoRam()));
+    return (
+      this._ppuBus ||
+      (this._ppuBus = new PpuBus(this.characterRam(), this.videoRam()))
+    );
   }
 
   videoRam(): Ram {

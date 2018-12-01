@@ -1,4 +1,4 @@
-import { Uint8, Uint16 } from './types';
+import { Uint8, Uint16 } from "./types";
 
 export default class Ram {
   bytes: Uint8Array;
@@ -12,6 +12,6 @@ export default class Ram {
   }
 
   write(address: Uint16, value: Uint8) {
-    return this.bytes[address] = value;
+    return (this.bytes[address] = value);
   }
 }

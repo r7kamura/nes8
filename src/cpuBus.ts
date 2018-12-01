@@ -1,8 +1,8 @@
-import DmaController from './dmaController';
-import Ppu from './ppu';
-import Ram from './ram';
-import Rom from './rom';
-import { Uint8, Uint16 } from './types';
+import DmaController from "./dmaController";
+import Ppu from "./ppu";
+import Ram from "./ram";
+import Rom from "./rom";
+import { Uint8, Uint16 } from "./types";
 
 export default class CpuBus {
   programRom?: Rom;

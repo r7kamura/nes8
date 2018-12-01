@@ -1,4 +1,4 @@
-import { Uint8, Uint16 } from './types';
+import { Uint8, Uint16 } from "./types";
 
 const enum StatusIndex {
   Carry,
@@ -8,7 +8,7 @@ const enum StatusIndex {
   Break,
   Reserved,
   Overflow,
-  Negative,
+  Negative
 }
 
 export default class CpuRegisters {
@@ -81,11 +81,11 @@ export default class CpuRegisters {
   }
 
   private toggleStatusBit(index: StatusIndex, value: boolean) {
-    const maskedByte = (1 << index);
+    const maskedByte = 1 << index;
     if (value) {
-      this.status |= maskedByte
+      this.status |= maskedByte;
     } else {
-      this.status &= ~maskedByte
+      this.status &= ~maskedByte;
     }
   }
 }

@@ -1,16 +1,13 @@
-import Ram from './ram';
-import Rom from './rom';
-import { Uint8, Uint16 } from './types';
+import Ram from "./ram";
+import Rom from "./rom";
+import { Uint8, Uint16 } from "./types";
 
 export default class PpuBus {
-  constructor(
-    public characterRam: Ram,
-    public videoRam: Ram
-  ) {}
+  constructor(public characterRam: Ram, public videoRam: Ram) {}
 
   set characterRom(characterRom: Rom) {
     for (let i = 0; i < characterRom.bytesize; i++) {
-        this.characterRam.write(i, characterRom.read(i));
+      this.characterRam.write(i, characterRom.read(i));
     }
   }
 
