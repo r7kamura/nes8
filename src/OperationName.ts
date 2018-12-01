@@ -1,4 +1,4 @@
-type operationName =
+type OperationName =
   'ADC' |
   'AND' |
   'ASL' |
@@ -66,4 +66,4 @@ type operationName =
   'TXS' |
   'TYA';
 
-export default operationName;
+export default OperationName;
