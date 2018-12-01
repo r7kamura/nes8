@@ -5,7 +5,7 @@ export default class CpuRegisters {
   indexX: Uint8;
   indexY: Uint8;
   programCounter: Uint16;
-  stackPointer: Uint8;
+  stackPointer: Uint16;
   status: Uint8;
 
   constructor() {
