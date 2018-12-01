@@ -1,10 +1,10 @@
-import Cpu from "./cpu";
-import CpuBus from "./cpuBus";
-import DmaController from "./dmaController";
-import InterruptLine from "./interruptLine";
-import Ppu from "./ppu";
-import PpuBus from "./ppuBus";
-import Ram from "./ram";
+import Cpu from "./Cpu";
+import CpuBus from "./CpuBus";
+import DmaController from "./DmaController";
+import InterruptLine from "./InterruptLine";
+import Ppu from "./Ppu";
+import PpuBus from "./PpuBus";
+import Ram from "./Ram";
 
 export default class PartsFactory {
   public cachedCpu?: Cpu;

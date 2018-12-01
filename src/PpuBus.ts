@@ -1,5 +1,5 @@
-import Ram from "./ram";
-import Rom from "./rom";
+import Ram from "./Ram";
+import Rom from "./Rom";
 import { Uint16, Uint8 } from "./types";
 
 export default class PpuBus {
