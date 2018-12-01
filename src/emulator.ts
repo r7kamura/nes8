@@ -16,6 +16,7 @@ export default class Emulator {
   }
 
   run() {
+    this.cpu.reset();
     while(true) {
       this.step();
     }

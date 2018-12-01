@@ -11,4 +11,8 @@ export default class Cpu {
   step(): number {
     return 1;
   }
+
+  reset() {
+    this.cpuRegisters.reset();
+  }
 }
