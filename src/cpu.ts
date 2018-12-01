@@ -3,6 +3,7 @@ import CpuBus from './cpuBus';
 import CpuRegisters from './cpuRegisters';
 import InterruptLine from './interruptLine';
 import Operation from './operation';
+import OperationName from './OperationName';
 import { Uint8, Uint16 } from './types';
 
 export default class Cpu {
@@ -38,7 +39,7 @@ export default class Cpu {
   }
 
   // @todo
-  private execute(operand: Uint8, addressingMode: AddressingMode, operationName: string) {}
+  private execute(operand: Uint8, addressingMode: AddressingMode, operationName: OperationName) {}
 
   // @todo
   private fetchOperand(addressingMode: AddressingMode): Uint8 {
@@ -50,7 +51,7 @@ export default class Cpu {
     return {
       addressingMode: 'immediate',
       cycle: 1,
-      name: 'dummy',
+      name: 'LDA',
     };
   }
 
