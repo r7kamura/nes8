@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "A NES emulator written in TypeScript.",
   "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/r7kamura/nes8.git"
@@ -15,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/r7kamura/nes8/issues"
   },
-  "homepage": "https://github.com/r7kamura/nes8#readme"
+  "homepage": "https://github.com/r7kamura/nes8#readme",
+  "devDependencies": {
+    "typescript": "^3.2.1"
+  }
 }
