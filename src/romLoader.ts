@@ -1,27 +1,30 @@
-import InesHeader from './inesHeader';
-import Rom from './rom';
+import InesHeader from "./inesHeader";
+import Rom from "./rom";
 
 export default class RomLoader {
-  bytes: Uint8Array;
+  public bytes: Uint8Array;
 
-  inesHeader: InesHeader;
+  public inesHeader: InesHeader;
 
-  constructor(buffer: ArrayBuffer) {
+  public constructor(buffer: ArrayBuffer) {
     this.bytes = new Uint8Array(buffer);
     this.inesHeader = new InesHeader(this.bytes);
   }
 
-  characterRom(): Rom {
+  public characterRom(): Rom {
     return new Rom(this.characterRomBytes());
   }
 
-  programRom(): Rom {
+  public programRom(): Rom {
     return new Rom(this.programRomBytes());
   }
 
   private characterRomBytes(): Uint8Array {
     const start = this.characterRomStart();
-    return this.bytes.slice(start, start + this.inesHeader.characterRomByteSize());
+    return this.bytes.slice(
+      start,
+      start + this.inesHeader.characterRomByteSize()
+    );
   }
 
   private characterRomStart(): number {
@@ -30,7 +33,10 @@ export default class RomLoader {
 
   private programRomBytes(): Uint8Array {
     const start = this.programRomStart();
-    return this.bytes.slice(start, start + this.inesHeader.programRomByteSize());
+    return this.bytes.slice(
+      start,
+      start + this.inesHeader.programRomByteSize()
+    );
   }
 
   private programRomStart(): number {

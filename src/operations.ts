@@ -1,1477 +1,1477 @@
-import Operation from './operation';
+import IOperation from "./ioperation";
 
-const operations: Array<Operation | null> = [
+const operations: Array<IOperation | null> = [
   {
-    fullName: 'BRK',
-    name: 'BRK',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 7,
+    fullName: "BRK",
+    name: "BRK"
   },
   {
-    fullName: 'ORA_INDX',
-    name: 'ORA',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "ORA_INDX",
+    name: "ORA"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SLO_INDX',
-    name: 'SLO',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "SLO_INDX",
+    name: "SLO"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'ORA_ZERO',
-    name: 'ORA',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "ORA_ZERO",
+    name: "ORA"
   },
   {
-    fullName: 'ASL_ZERO',
-    name: 'ASL',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "ASL_ZERO",
+    name: "ASL"
   },
   {
-    fullName: 'SLO_ZERO',
-    name: 'SLO',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "SLO_ZERO",
+    name: "SLO"
   },
   {
-    fullName: 'PHP',
-    name: 'PHP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "PHP",
+    name: "PHP"
   },
   {
-    fullName: 'ORA_IMM',
-    name: 'ORA',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "ORA_IMM",
+    name: "ORA"
   },
   {
-    fullName: 'ASL',
-    name: 'ASL',
-    addressingMode: 'accumulator',
+    addressingMode: "accumulator",
     cycle: 2,
+    fullName: "ASL",
+    name: "ASL"
   },
   null,
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'ORA_ABS',
-    name: 'ORA',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "ORA_ABS",
+    name: "ORA"
   },
   {
-    fullName: 'ASL_ABS',
-    name: 'ASL',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "ASL_ABS",
+    name: "ASL"
   },
   {
-    fullName: 'SLO_ABS',
-    name: 'SLO',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "SLO_ABS",
+    name: "SLO"
   },
   {
-    fullName: 'BPL',
-    name: 'BPL',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BPL",
+    name: "BPL"
   },
   {
-    fullName: 'ORA_INDY',
-    name: 'ORA',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "ORA_INDY",
+    name: "ORA"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SLO_INDY',
-    name: 'SLO',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "SLO_INDY",
+    name: "SLO"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'ORA_ZEROX',
-    name: 'ORA',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "ORA_ZEROX",
+    name: "ORA"
   },
   {
-    fullName: 'ASL_ZEROX',
-    name: 'ASL',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "ASL_ZEROX",
+    name: "ASL"
   },
   {
-    fullName: 'SLO_ZEROX',
-    name: 'SLO',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "SLO_ZEROX",
+    name: "SLO"
   },
   {
-    fullName: 'CLC',
-    name: 'CLC',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "CLC",
+    name: "CLC"
   },
   {
-    fullName: 'ORA_ABSY',
-    name: 'ORA',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "ORA_ABSY",
+    name: "ORA"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SLO_ABSY',
-    name: 'SLO',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 7,
+    fullName: "SLO_ABSY",
+    name: "SLO"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'ORA_ABSX',
-    name: 'ORA',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "ORA_ABSX",
+    name: "ORA"
   },
   {
-    fullName: 'ASL_ABSX',
-    name: 'ASL',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 6,
+    fullName: "ASL_ABSX",
+    name: "ASL"
   },
   {
-    fullName: 'SLO_ABSX',
-    name: 'SLO',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "SLO_ABSX",
+    name: "SLO"
   },
   {
-    fullName: 'JSR_ABS',
-    name: 'JSR',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "JSR_ABS",
+    name: "JSR"
   },
   {
-    fullName: 'AND_INDX',
-    name: 'AND',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "AND_INDX",
+    name: "AND"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RLA_INDX',
-    name: 'RLA',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "RLA_INDX",
+    name: "RLA"
   },
   {
-    fullName: 'BIT_ZERO',
-    name: 'BIT',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "BIT_ZERO",
+    name: "BIT"
   },
   {
-    fullName: 'AND_ZERO',
-    name: 'AND',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "AND_ZERO",
+    name: "AND"
   },
   {
-    fullName: 'ROL_ZERO',
-    name: 'ROL',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "ROL_ZERO",
+    name: "ROL"
   },
   {
-    fullName: 'RLA_ZERO',
-    name: 'RLA',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "RLA_ZERO",
+    name: "RLA"
   },
   {
-    fullName: 'PLP',
-    name: 'PLP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "PLP",
+    name: "PLP"
   },
   {
-    fullName: 'AND_IMM',
-    name: 'AND',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "AND_IMM",
+    name: "AND"
   },
   {
-    fullName: 'ROL',
-    name: 'ROL',
-    addressingMode: 'accumulator',
+    addressingMode: "accumulator",
     cycle: 2,
+    fullName: "ROL",
+    name: "ROL"
   },
   null,
   {
-    fullName: 'BIT_ABS',
-    name: 'BIT',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "BIT_ABS",
+    name: "BIT"
   },
   {
-    fullName: 'AND_ABS',
-    name: 'AND',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "AND_ABS",
+    name: "AND"
   },
   {
-    fullName: 'ROL_ABS',
-    name: 'ROL',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "ROL_ABS",
+    name: "ROL"
   },
   {
-    fullName: 'RLA_ABS',
-    name: 'RLA',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "RLA_ABS",
+    name: "RLA"
   },
   {
-    fullName: 'BMI',
-    name: 'BMI',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BMI",
+    name: "BMI"
   },
   {
-    fullName: 'AND_INDY',
-    name: 'AND',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "AND_INDY",
+    name: "AND"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RLA_INDY',
-    name: 'RLA',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "RLA_INDY",
+    name: "RLA"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'AND_ZEROX',
-    name: 'AND',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "AND_ZEROX",
+    name: "AND"
   },
   {
-    fullName: 'ROL_ZEROX',
-    name: 'ROL',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "ROL_ZEROX",
+    name: "ROL"
   },
   {
-    fullName: 'RLA_ZEROX',
-    name: 'RLA',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "RLA_ZEROX",
+    name: "RLA"
   },
   {
-    fullName: 'SEC',
-    name: 'SEC',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "SEC",
+    name: "SEC"
   },
   {
-    fullName: 'AND_ABSY',
-    name: 'AND',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "AND_ABSY",
+    name: "AND"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RLA_ABSY',
-    name: 'RLA',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 7,
+    fullName: "RLA_ABSY",
+    name: "RLA"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'AND_ABSX',
-    name: 'AND',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "AND_ABSX",
+    name: "AND"
   },
   {
-    fullName: 'ROL_ABSX',
-    name: 'ROL',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 6,
+    fullName: "ROL_ABSX",
+    name: "ROL"
   },
   {
-    fullName: 'RLA_ABSX',
-    name: 'RLA',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "RLA_ABSX",
+    name: "RLA"
   },
   {
-    fullName: 'RTI',
-    name: 'RTI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 6,
+    fullName: "RTI",
+    name: "RTI"
   },
   {
-    fullName: 'EOR_INDX',
-    name: 'EOR',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "EOR_INDX",
+    name: "EOR"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SRE_INDX',
-    name: 'SRE',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "SRE_INDX",
+    name: "SRE"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'EOR_ZERO',
-    name: 'EOR',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "EOR_ZERO",
+    name: "EOR"
   },
   {
-    fullName: 'LSR_ZERO',
-    name: 'LSR',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "LSR_ZERO",
+    name: "LSR"
   },
   {
-    fullName: 'SRE_ZERO',
-    name: 'SRE',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "SRE_ZERO",
+    name: "SRE"
   },
   {
-    fullName: 'PHA',
-    name: 'PHA',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "PHA",
+    name: "PHA"
   },
   {
-    fullName: 'EOR_IMM',
-    name: 'EOR',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "EOR_IMM",
+    name: "EOR"
   },
   {
-    fullName: 'LSR',
-    name: 'LSR',
-    addressingMode: 'accumulator',
+    addressingMode: "accumulator",
     cycle: 2,
+    fullName: "LSR",
+    name: "LSR"
   },
   null,
   {
-    fullName: 'JMP_ABS',
-    name: 'JMP',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 3,
+    fullName: "JMP_ABS",
+    name: "JMP"
   },
   {
-    fullName: 'EOR_ABS',
-    name: 'EOR',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "EOR_ABS",
+    name: "EOR"
   },
   {
-    fullName: 'LSR_ABS',
-    name: 'LSR',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "LSR_ABS",
+    name: "LSR"
   },
   {
-    fullName: 'SRE_ABS',
-    name: 'SRE',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "SRE_ABS",
+    name: "SRE"
   },
   {
-    fullName: 'BVC',
-    name: 'BVC',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BVC",
+    name: "BVC"
   },
   {
-    fullName: 'EOR_INDY',
-    name: 'EOR',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "EOR_INDY",
+    name: "EOR"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SRE_INDY',
-    name: 'SRE',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "SRE_INDY",
+    name: "SRE"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'EOR_ZEROX',
-    name: 'EOR',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "EOR_ZEROX",
+    name: "EOR"
   },
   {
-    fullName: 'LSR_ZEROX',
-    name: 'LSR',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "LSR_ZEROX",
+    name: "LSR"
   },
   {
-    fullName: 'SRE_ZEROX',
-    name: 'SRE',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "SRE_ZEROX",
+    name: "SRE"
   },
   {
-    fullName: 'CLI',
-    name: 'CLI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "CLI",
+    name: "CLI"
   },
   {
-    fullName: 'EOR_ABSY',
-    name: 'EOR',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "EOR_ABSY",
+    name: "EOR"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SRE_ABSY',
-    name: 'SRE',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 7,
+    fullName: "SRE_ABSY",
+    name: "SRE"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'EOR_ABSX',
-    name: 'EOR',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "EOR_ABSX",
+    name: "EOR"
   },
   {
-    fullName: 'LSR_ABSX',
-    name: 'LSR',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 6,
+    fullName: "LSR_ABSX",
+    name: "LSR"
   },
   {
-    fullName: 'SRE_ABSX',
-    name: 'SRE',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "SRE_ABSX",
+    name: "SRE"
   },
   {
-    fullName: 'RTS',
-    name: 'RTS',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 6,
+    fullName: "RTS",
+    name: "RTS"
   },
   {
-    fullName: 'ADC_INDX',
-    name: 'ADC',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "ADC_INDX",
+    name: "ADC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RRA_INDX',
-    name: 'RRA',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "RRA_INDX",
+    name: "RRA"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'ADC_ZERO',
-    name: 'ADC',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "ADC_ZERO",
+    name: "ADC"
   },
   {
-    fullName: 'ROR_ZERO',
-    name: 'ROR',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "ROR_ZERO",
+    name: "ROR"
   },
   {
-    fullName: 'RRA_ZERO',
-    name: 'RRA',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "RRA_ZERO",
+    name: "RRA"
   },
   {
-    fullName: 'PLA',
-    name: 'PLA',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "PLA",
+    name: "PLA"
   },
   {
-    fullName: 'ADC_IMM',
-    name: 'ADC',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "ADC_IMM",
+    name: "ADC"
   },
   {
-    fullName: 'ROR',
-    name: 'ROR',
-    addressingMode: 'accumulator',
+    addressingMode: "accumulator",
     cycle: 2,
+    fullName: "ROR",
+    name: "ROR"
   },
   null,
   {
-    fullName: 'JMP_INDABS',
-    name: 'JMP',
-    addressingMode: 'indirect_absolute',
+    addressingMode: "indirect_absolute",
     cycle: 5,
+    fullName: "JMP_INDABS",
+    name: "JMP"
   },
   {
-    fullName: 'ADC_ABS',
-    name: 'ADC',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "ADC_ABS",
+    name: "ADC"
   },
   {
-    fullName: 'ROR_ABS',
-    name: 'ROR',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "ROR_ABS",
+    name: "ROR"
   },
   {
-    fullName: 'RRA_ABS',
-    name: 'RRA',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "RRA_ABS",
+    name: "RRA"
   },
   {
-    fullName: 'BVS',
-    name: 'BVS',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BVS",
+    name: "BVS"
   },
   {
-    fullName: 'ADC_INDY',
-    name: 'ADC',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "ADC_INDY",
+    name: "ADC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RRA_INDY',
-    name: 'RRA',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "RRA_INDY",
+    name: "RRA"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'ADC_ZEROX',
-    name: 'ADC',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "ADC_ZEROX",
+    name: "ADC"
   },
   {
-    fullName: 'ROR_ZEROX',
-    name: 'ROR',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "ROR_ZEROX",
+    name: "ROR"
   },
   {
-    fullName: 'RRA_ZEROX',
-    name: 'RRA',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "RRA_ZEROX",
+    name: "RRA"
   },
   {
-    fullName: 'SEI',
-    name: 'SEI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "SEI",
+    name: "SEI"
   },
   {
-    fullName: 'ADC_ABSY',
-    name: 'ADC',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "ADC_ABSY",
+    name: "ADC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'RRA_ABSY',
-    name: 'RRA',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 7,
+    fullName: "RRA_ABSY",
+    name: "RRA"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'ADC_ABSX',
-    name: 'ADC',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "ADC_ABSX",
+    name: "ADC"
   },
   {
-    fullName: 'ROR_ABSX',
-    name: 'ROR',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 6,
+    fullName: "ROR_ABSX",
+    name: "ROR"
   },
   {
-    fullName: 'RRA_ABSX',
-    name: 'RRA',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "RRA_ABSX",
+    name: "RRA"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'STA_INDX',
-    name: 'STA',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "STA_INDX",
+    name: "STA"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'SAX_INDX',
-    name: 'SAX',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "SAX_INDX",
+    name: "SAX"
   },
   {
-    fullName: 'STY_ZERO',
-    name: 'STY',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "STY_ZERO",
+    name: "STY"
   },
   {
-    fullName: 'STA_ZERO',
-    name: 'STA',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "STA_ZERO",
+    name: "STA"
   },
   {
-    fullName: 'STX_ZERO',
-    name: 'STX',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "STX_ZERO",
+    name: "STX"
   },
   {
-    fullName: 'SAX_ZERO',
-    name: 'SAX',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "SAX_ZERO",
+    name: "SAX"
   },
   {
-    fullName: 'DEY',
-    name: 'DEY',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "DEY",
+    name: "DEY"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'TXA',
-    name: 'TXA',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TXA",
+    name: "TXA"
   },
   null,
   {
-    fullName: 'STY_ABS',
-    name: 'STY',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "STY_ABS",
+    name: "STY"
   },
   {
-    fullName: 'STA_ABS',
-    name: 'STA',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "STA_ABS",
+    name: "STA"
   },
   {
-    fullName: 'STX_ABS',
-    name: 'STX',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "STX_ABS",
+    name: "STX"
   },
   {
-    fullName: 'SAX_ABS',
-    name: 'SAX',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "SAX_ABS",
+    name: "SAX"
   },
   {
-    fullName: 'BCC',
-    name: 'BCC',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BCC",
+    name: "BCC"
   },
   {
-    fullName: 'STA_INDY',
-    name: 'STA',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 6,
+    fullName: "STA_INDY",
+    name: "STA"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   null,
   {
-    fullName: 'STY_ZEROX',
-    name: 'STY',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "STY_ZEROX",
+    name: "STY"
   },
   {
-    fullName: 'STA_ZEROX',
-    name: 'STA',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "STA_ZEROX",
+    name: "STA"
   },
   {
-    fullName: 'STX_ZEROY',
-    name: 'STX',
-    addressingMode: 'zero_page_y',
+    addressingMode: "zero_page_y",
     cycle: 4,
+    fullName: "STX_ZEROY",
+    name: "STX"
   },
   {
-    fullName: 'SAX_ZEROY',
-    name: 'SAX',
-    addressingMode: 'zero_page_y',
+    addressingMode: "zero_page_y",
     cycle: 4,
+    fullName: "SAX_ZEROY",
+    name: "SAX"
   },
   {
-    fullName: 'TYA',
-    name: 'TYA',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TYA",
+    name: "TYA"
   },
   {
-    fullName: 'STA_ABSY',
-    name: 'STA',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "STA_ABSY",
+    name: "STA"
   },
   {
-    fullName: 'TXS',
-    name: 'TXS',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TXS",
+    name: "TXS"
   },
   null,
   null,
   {
-    fullName: 'STA_ABSX',
-    name: 'STA',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "STA_ABSX",
+    name: "STA"
   },
   null,
   null,
   {
-    fullName: 'LDY_IMM',
-    name: 'LDY',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "LDY_IMM",
+    name: "LDY"
   },
   {
-    fullName: 'LDA_INDX',
-    name: 'LDA',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "LDA_INDX",
+    name: "LDA"
   },
   {
-    fullName: 'LDX_IMM',
-    name: 'LDX',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "LDX_IMM",
+    name: "LDX"
   },
   {
-    fullName: 'LAX_INDX',
-    name: 'LAX',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "LAX_INDX",
+    name: "LAX"
   },
   {
-    fullName: 'LDY_ZERO',
-    name: 'LDY',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "LDY_ZERO",
+    name: "LDY"
   },
   {
-    fullName: 'LDA_ZERO',
-    name: 'LDA',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "LDA_ZERO",
+    name: "LDA"
   },
   {
-    fullName: 'LDX_ZERO',
-    name: 'LDX',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "LDX_ZERO",
+    name: "LDX"
   },
   {
-    fullName: 'LAX_ZERO',
-    name: 'LAX',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "LAX_ZERO",
+    name: "LAX"
   },
   {
-    fullName: 'TAY',
-    name: 'TAY',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TAY",
+    name: "TAY"
   },
   {
-    fullName: 'LDA_IMM',
-    name: 'LDA',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "LDA_IMM",
+    name: "LDA"
   },
   {
-    fullName: 'TAX',
-    name: 'TAX',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TAX",
+    name: "TAX"
   },
   null,
   {
-    fullName: 'LDY_ABS',
-    name: 'LDY',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "LDY_ABS",
+    name: "LDY"
   },
   {
-    fullName: 'LDA_ABS',
-    name: 'LDA',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "LDA_ABS",
+    name: "LDA"
   },
   {
-    fullName: 'LDX_ABS',
-    name: 'LDX',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "LDX_ABS",
+    name: "LDX"
   },
   {
-    fullName: 'LAX_ABS',
-    name: 'LAX',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "LAX_ABS",
+    name: "LAX"
   },
   {
-    fullName: 'BCS',
-    name: 'BCS',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BCS",
+    name: "BCS"
   },
   {
-    fullName: 'LDA_INDY',
-    name: 'LDA',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "LDA_INDY",
+    name: "LDA"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'LAX_INDY',
-    name: 'LAX',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "LAX_INDY",
+    name: "LAX"
   },
   {
-    fullName: 'LDY_ZEROX',
-    name: 'LDY',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "LDY_ZEROX",
+    name: "LDY"
   },
   {
-    fullName: 'LDA_ZEROX',
-    name: 'LDA',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "LDA_ZEROX",
+    name: "LDA"
   },
   {
-    fullName: 'LDX_ZEROY',
-    name: 'LDX',
-    addressingMode: 'zero_page_y',
+    addressingMode: "zero_page_y",
     cycle: 4,
+    fullName: "LDX_ZEROY",
+    name: "LDX"
   },
   {
-    fullName: 'LAX_ZEROY',
-    name: 'LAX',
-    addressingMode: 'zero_page_y',
+    addressingMode: "zero_page_y",
     cycle: 4,
+    fullName: "LAX_ZEROY",
+    name: "LAX"
   },
   {
-    fullName: 'CLV',
-    name: 'CLV',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "CLV",
+    name: "CLV"
   },
   {
-    fullName: 'LDA_ABSY',
-    name: 'LDA',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "LDA_ABSY",
+    name: "LDA"
   },
   {
-    fullName: 'TSX',
-    name: 'TSX',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "TSX",
+    name: "TSX"
   },
   null,
   {
-    fullName: 'LDY_ABSX',
-    name: 'LDY',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "LDY_ABSX",
+    name: "LDY"
   },
   {
-    fullName: 'LDA_ABSX',
-    name: 'LDA',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "LDA_ABSX",
+    name: "LDA"
   },
   {
-    fullName: 'LDX_ABSY',
-    name: 'LDX',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "LDX_ABSY",
+    name: "LDX"
   },
   {
-    fullName: 'LAX_ABSY',
-    name: 'LAX',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "LAX_ABSY",
+    name: "LAX"
   },
   {
-    fullName: 'CPY_IMM',
-    name: 'CPY',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "CPY_IMM",
+    name: "CPY"
   },
   {
-    fullName: 'CMP_INDX',
-    name: 'CMP',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "CMP_INDX",
+    name: "CMP"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'DCP_INDX',
-    name: 'DCP',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "DCP_INDX",
+    name: "DCP"
   },
   {
-    fullName: 'CPY_ZERO',
-    name: 'CPY',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "CPY_ZERO",
+    name: "CPY"
   },
   {
-    fullName: 'CMP_ZERO',
-    name: 'CMP',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "CMP_ZERO",
+    name: "CMP"
   },
   {
-    fullName: 'DEC_ZERO',
-    name: 'DEC',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "DEC_ZERO",
+    name: "DEC"
   },
   {
-    fullName: 'DCP_ZERO',
-    name: 'DCP',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "DCP_ZERO",
+    name: "DCP"
   },
   {
-    fullName: 'INY',
-    name: 'INY',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "INY",
+    name: "INY"
   },
   {
-    fullName: 'CMP_IMM',
-    name: 'CMP',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "CMP_IMM",
+    name: "CMP"
   },
   {
-    fullName: 'DEX',
-    name: 'DEX',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "DEX",
+    name: "DEX"
   },
   null,
   {
-    fullName: 'CPY_ABS',
-    name: 'CPY',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "CPY_ABS",
+    name: "CPY"
   },
   {
-    fullName: 'CMP_ABS',
-    name: 'CMP',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "CMP_ABS",
+    name: "CMP"
   },
   {
-    fullName: 'DEC_ABS',
-    name: 'DEC',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "DEC_ABS",
+    name: "DEC"
   },
   {
-    fullName: 'DCP_ABS',
-    name: 'DCP',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "DCP_ABS",
+    name: "DCP"
   },
   {
-    fullName: 'BNE',
-    name: 'BNE',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BNE",
+    name: "BNE"
   },
   {
-    fullName: 'CMP_INDY',
-    name: 'CMP',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "CMP_INDY",
+    name: "CMP"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'DCP_INDY',
-    name: 'DCP',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "DCP_INDY",
+    name: "DCP"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'CMP_ZEROX',
-    name: 'CMP',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "CMP_ZEROX",
+    name: "CMP"
   },
   {
-    fullName: 'DEC_ZEROX',
-    name: 'DEC',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "DEC_ZEROX",
+    name: "DEC"
   },
   {
-    fullName: 'DCP_ZEROX',
-    name: 'DCP',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "DCP_ZEROX",
+    name: "DCP"
   },
   {
-    fullName: 'CLD',
-    name: 'CLD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "CLD",
+    name: "CLD"
   },
   {
-    fullName: 'CMP_ABSY',
-    name: 'CMP',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "CMP_ABSY",
+    name: "CMP"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'DCP_ABSY',
-    name: 'DCP',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 2,
+    fullName: "DCP_ABSY",
+    name: "DCP"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'CMP_ABSX',
-    name: 'CMP',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "CMP_ABSX",
+    name: "CMP"
   },
   {
-    fullName: 'DEC_ABSX',
-    name: 'DEC',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "DEC_ABSX",
+    name: "DEC"
   },
   {
-    fullName: 'DCP_ABSX',
-    name: 'DCP',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "DCP_ABSX",
+    name: "DCP"
   },
   {
-    fullName: 'CPX_IMM',
-    name: 'CPX',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "CPX_IMM",
+    name: "CPX"
   },
   {
-    fullName: 'SBC_INDX',
-    name: 'SBC',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 6,
+    fullName: "SBC_INDX",
+    name: "SBC"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 3,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'ISB_INDX',
-    name: 'ISB',
-    addressingMode: 'pre_indexed_indirect',
+    addressingMode: "pre_indexed_indirect",
     cycle: 8,
+    fullName: "ISB_INDX",
+    name: "ISB"
   },
   {
-    fullName: 'CPX_ZERO',
-    name: 'CPX',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "CPX_ZERO",
+    name: "CPX"
   },
   {
-    fullName: 'SBC_ZERO',
-    name: 'SBC',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 3,
+    fullName: "SBC_ZERO",
+    name: "SBC"
   },
   {
-    fullName: 'INC_ZERO',
-    name: 'INC',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "INC_ZERO",
+    name: "INC"
   },
   {
-    fullName: 'ISB_ZERO',
-    name: 'ISB',
-    addressingMode: 'zero_page',
+    addressingMode: "zero_page",
     cycle: 5,
+    fullName: "ISB_ZERO",
+    name: "ISB"
   },
   {
-    fullName: 'INX',
-    name: 'INX',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "INX",
+    name: "INX"
   },
   {
-    fullName: 'SBC_IMM',
-    name: 'SBC',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "SBC_IMM",
+    name: "SBC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'SBC_IMM',
-    name: 'SBC',
-    addressingMode: 'immediate',
+    addressingMode: "immediate",
     cycle: 2,
+    fullName: "SBC_IMM",
+    name: "SBC"
   },
   {
-    fullName: 'CPX_ABS',
-    name: 'CPX',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "CPX_ABS",
+    name: "CPX"
   },
   {
-    fullName: 'SBC_ABS',
-    name: 'SBC',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 4,
+    fullName: "SBC_ABS",
+    name: "SBC"
   },
   {
-    fullName: 'INC_ABS',
-    name: 'INC',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "INC_ABS",
+    name: "INC"
   },
   {
-    fullName: 'ISB_ABS',
-    name: 'ISB',
-    addressingMode: 'absolute',
+    addressingMode: "absolute",
     cycle: 6,
+    fullName: "ISB_ABS",
+    name: "ISB"
   },
   {
-    fullName: 'BEQ',
-    name: 'BEQ',
-    addressingMode: 'relative',
+    addressingMode: "relative",
     cycle: 2,
+    fullName: "BEQ",
+    name: "BEQ"
   },
   {
-    fullName: 'SBC_INDY',
-    name: 'SBC',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 5,
+    fullName: "SBC_INDY",
+    name: "SBC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'ISB_INDY',
-    name: 'ISB',
-    addressingMode: 'post_indexed_indirect',
+    addressingMode: "post_indexed_indirect",
     cycle: 8,
+    fullName: "ISB_INDY",
+    name: "ISB"
   },
   {
-    fullName: 'NOPD',
-    name: 'NOPD',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPD",
+    name: "NOPD"
   },
   {
-    fullName: 'SBC_ZEROX',
-    name: 'SBC',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 4,
+    fullName: "SBC_ZEROX",
+    name: "SBC"
   },
   {
-    fullName: 'INC_ZEROX',
-    name: 'INC',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "INC_ZEROX",
+    name: "INC"
   },
   {
-    fullName: 'ISB_ZEROX',
-    name: 'ISB',
-    addressingMode: 'zero_page_x',
+    addressingMode: "zero_page_x",
     cycle: 6,
+    fullName: "ISB_ZEROX",
+    name: "ISB"
   },
   {
-    fullName: 'SED',
-    name: 'SED',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "SED",
+    name: "SED"
   },
   {
-    fullName: 'SBC_ABSY',
-    name: 'SBC',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 4,
+    fullName: "SBC_ABSY",
+    name: "SBC"
   },
   {
-    fullName: 'NOP',
-    name: 'NOP',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 2,
+    fullName: "NOP",
+    name: "NOP"
   },
   {
-    fullName: 'ISB_ABSY',
-    name: 'ISB',
-    addressingMode: 'absolute_y',
+    addressingMode: "absolute_y",
     cycle: 2,
+    fullName: "ISB_ABSY",
+    name: "ISB"
   },
   {
-    fullName: 'NOPI',
-    name: 'NOPI',
-    addressingMode: 'implied',
+    addressingMode: "implied",
     cycle: 4,
+    fullName: "NOPI",
+    name: "NOPI"
   },
   {
-    fullName: 'SBC_ABSX',
-    name: 'SBC',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 4,
+    fullName: "SBC_ABSX",
+    name: "SBC"
   },
   {
-    fullName: 'INC_ABSX',
-    name: 'INC',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
+    fullName: "INC_ABSX",
+    name: "INC"
   },
   {
-    fullName: 'ISB_ABSX',
-    name: 'ISB',
-    addressingMode: 'absolute_x',
+    addressingMode: "absolute_x",
     cycle: 7,
-  },
+    fullName: "ISB_ABSX",
+    name: "ISB"
+  }
 ];
 
 export default operations;

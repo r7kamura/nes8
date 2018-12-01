@@ -1,63 +1,88 @@
-import Cpu from './cpu';
-import CpuBus from './cpuBus';
-import DmaController from './dmaController';
-import InterruptLine from './interruptLine';
-import Ppu from './ppu';
-import PpuBus from './ppuBus';
-import Ram from './ram';
+import Cpu from "./cpu";
+import CpuBus from "./cpuBus";
+import DmaController from "./dmaController";
+import InterruptLine from "./interruptLine";
+import Ppu from "./ppu";
+import PpuBus from "./ppuBus";
+import Ram from "./ram";
 
 export default class PartsFactory {
-  _cpu?: Cpu;
+  public cachedCpu?: Cpu;
 
-  _cpuBus?: CpuBus;
+  public cachedCpuBus?: CpuBus;
 
-  _characterRam?: Ram;
+  public cachedCharacterRam?: Ram;
 
-  _dmaController?: DmaController;
+  public cachedDmaController?: DmaController;
 
-  _interruptLine?: InterruptLine;
+  public cachedInterruptLine?: InterruptLine;
 
-  _ppu?: Ppu;
+  public cachedPpu?: Ppu;
 
-  _ppuBus?: PpuBus;
+  public cachedPpuBus?: PpuBus;
 
-  _videoRam?: Ram;
+  public cachedVideoRam?: Ram;
 
-  _workingRam?: Ram;
+  public cachedWorkingRam?: Ram;
 
-  characterRam(): Ram {
-    return this._characterRam || (this._characterRam = new Ram(4096));
+  public characterRam(): Ram {
+    return this.cachedCharacterRam || (this.cachedCharacterRam = new Ram(4096));
   }
 
-  cpu(): Cpu {
-    return this._cpu || (this._cpu = new Cpu(this.cpuBus(), this.interruptLine()));
+  public cpu(): Cpu {
+    return (
+      this.cachedCpu ||
+      (this.cachedCpu = new Cpu(this.cpuBus(), this.interruptLine()))
+    );
   }
 
-  cpuBus(): CpuBus {
-    return this._cpuBus || (this._cpuBus = new CpuBus(this.dmaController(), this.ppu(), this.workingRam()));
+  public cpuBus(): CpuBus {
+    return (
+      this.cachedCpuBus ||
+      (this.cachedCpuBus = new CpuBus(
+        this.dmaController(),
+        this.ppu(),
+        this.workingRam()
+      ))
+    );
   }
 
-  dmaController(): DmaController {
-    return this._dmaController || (this._dmaController = new DmaController(this.ppu(), this.workingRam()));
+  public dmaController(): DmaController {
+    return (
+      this.cachedDmaController ||
+      (this.cachedDmaController = new DmaController(
+        this.ppu(),
+        this.workingRam()
+      ))
+    );
   }
 
-  interruptLine(): InterruptLine {
-    return this._interruptLine || (this._interruptLine = new InterruptLine());
+  public interruptLine(): InterruptLine {
+    return (
+      this.cachedInterruptLine ||
+      (this.cachedInterruptLine = new InterruptLine())
+    );
   }
 
-  ppu(): Ppu {
-    return this._ppu || (this._ppu = new Ppu(this.ppuBus(), this.interruptLine()));
+  public ppu(): Ppu {
+    return (
+      this.cachedPpu ||
+      (this.cachedPpu = new Ppu(this.ppuBus(), this.interruptLine()))
+    );
   }
 
-  ppuBus(): PpuBus {
-    return this._ppuBus || (this._ppuBus = new PpuBus(this.characterRam(), this.videoRam()));
+  public ppuBus(): PpuBus {
+    return (
+      this.cachedPpuBus ||
+      (this.cachedPpuBus = new PpuBus(this.characterRam(), this.videoRam()))
+    );
   }
 
-  videoRam(): Ram {
-    return this._videoRam || (this._videoRam = new Ram(8192));
+  public videoRam(): Ram {
+    return this.cachedVideoRam || (this.cachedVideoRam = new Ram(8192));
   }
 
-  workingRam(): Ram {
-    return this._workingRam || (this._workingRam = new Ram(2048));
+  public workingRam(): Ram {
+    return this.cachedWorkingRam || (this.cachedWorkingRam = new Ram(2048));
   }
 }

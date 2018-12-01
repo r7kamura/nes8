@@ -1,19 +1,19 @@
 export default class InesHeader {
   constructor(private bytes: Uint8Array) {}
 
-  byteSize(): number {
+  public byteSize(): number {
     return 16;
   }
 
-  characterRomByteSize(): number {
+  public characterRomByteSize(): number {
     return this.bytes[5] * 8192;
   }
 
-  programRomByteSize(): number {
+  public programRomByteSize(): number {
     return this.bytes[4] * 16384;
   }
 
-  trainerByteSize(): number {
+  public trainerByteSize(): number {
     return this.hasTrainer() ? 512 : 0;
   }
 

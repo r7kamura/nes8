@@ -1,25 +1,25 @@
 export default class InterruptLine {
-  irq: boolean;
-  nmi: boolean;
+  public irq: boolean;
+  public nmi: boolean;
 
   constructor() {
     this.irq = false;
     this.nmi = false;
   }
 
-  assertIrq() {
+  public assertIrq() {
     this.irq = true;
   }
 
-  assertNmi() {
+  public assertNmi() {
     this.nmi = true;
   }
 
-  deassertIrq() {
+  public deassertIrq() {
     this.irq = false;
   }
 
-  deassertNmi() {
+  public deassertNmi() {
     this.nmi = false;
   }
 }

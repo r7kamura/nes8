@@ -1,4 +1,4 @@
-import { Uint8, Uint16 } from './types';
+import { Uint16, Uint8 } from "./types";
 
 const enum StatusIndex {
   Carry,
@@ -8,16 +8,16 @@ const enum StatusIndex {
   Break,
   Reserved,
   Overflow,
-  Negative,
+  Negative
 }
 
 export default class CpuRegisters {
-  accumulator: Uint8;
-  indexX: Uint8;
-  indexY: Uint8;
-  programCounter: Uint16;
-  stackPointer: Uint16;
-  status: Uint8;
+  public accumulator: Uint8;
+  public indexX: Uint8;
+  public indexY: Uint8;
+  public programCounter: Uint16;
+  public stackPointer: Uint16;
+  public status: Uint8;
 
   constructor() {
     this.accumulator = 0;
@@ -32,44 +32,44 @@ export default class CpuRegisters {
     return this.maskStatusBit(StatusIndex.Break);
   }
 
-  get carry(): boolean {
-    return this.maskStatusBit(StatusIndex.Carry);
-  }
-
-  get interrupt(): boolean {
-    return this.maskStatusBit(StatusIndex.Interrupt);
-  }
-
-  get negative(): boolean {
-    return this.maskStatusBit(StatusIndex.Negative);
-  }
-
-  get overflow(): boolean {
-    return this.maskStatusBit(StatusIndex.Overflow);
-  }
-
-  get zero(): boolean {
-    return this.maskStatusBit(StatusIndex.Zero);
-  }
-
   set break(value: boolean) {
     this.toggleStatusBit(StatusIndex.Break, value);
+  }
+
+  get carry(): boolean {
+    return this.maskStatusBit(StatusIndex.Carry);
   }
 
   set carry(value: boolean) {
     this.toggleStatusBit(StatusIndex.Carry, value);
   }
 
+  get interrupt(): boolean {
+    return this.maskStatusBit(StatusIndex.Interrupt);
+  }
+
   set interrupt(value: boolean) {
     this.toggleStatusBit(StatusIndex.Interrupt, value);
+  }
+
+  get negative(): boolean {
+    return this.maskStatusBit(StatusIndex.Negative);
   }
 
   set negative(value: boolean) {
     this.toggleStatusBit(StatusIndex.Negative, value);
   }
 
+  get overflow(): boolean {
+    return this.maskStatusBit(StatusIndex.Overflow);
+  }
+
   set overflow(value: boolean) {
     this.toggleStatusBit(StatusIndex.Overflow, value);
+  }
+
+  get zero(): boolean {
+    return this.maskStatusBit(StatusIndex.Zero);
   }
 
   set zero(value: boolean) {
@@ -81,11 +81,11 @@ export default class CpuRegisters {
   }
 
   private toggleStatusBit(index: StatusIndex, value: boolean) {
-    const maskedByte = (1 << index);
+    const maskedByte = 1 << index;
     if (value) {
-      this.status |= maskedByte
+      this.status |= maskedByte;
     } else {
-      this.status &= ~maskedByte
+      this.status &= ~maskedByte;
     }
   }
 }
