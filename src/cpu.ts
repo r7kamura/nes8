@@ -1,9 +1,10 @@
+import CpuBus from './cpuBus';
 import CpuRegisters from './cpuRegisters';
 
 export default class Cpu {
   cpuRegisters: CpuRegisters;
 
-  constructor() {
+  constructor(private cpuBus: CpuBus) {
     this.cpuRegisters = new CpuRegisters();
   }
 
