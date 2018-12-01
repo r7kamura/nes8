@@ -33,10 +33,14 @@ export default class Emulator {
   }
 
   public run() {
-    this.cpu.reset();
+    this.reset();
     while (true) {
       this.step();
     }
+  }
+
+  private reset() {
+    this.cpu.reset();
   }
 
   private step() {
