@@ -842,13 +842,13 @@ export default class Cpu {
       case "absolute": {
         return this.fetchWord();
       }
-      case "absolute_x": {
+      case "absoluteX": {
         const baseAddress = this.fetchWord();
         const result = baseAddress + this.registers.indexX;
         this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
         return result & 0xffff;
       }
-      case "absolute_y": {
+      case "absoluteY": {
         const baseAddress = this.fetchWord();
         const result = baseAddress + this.registers.indexY;
         this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
@@ -863,19 +863,19 @@ export default class Cpu {
       case "implied": {
         return;
       }
-      case "indirect_absolute": {
+      case "indirectAbsolute": {
         const address = this.fetchWord();
         const low = this.read(address);
         const high = this.read((address & 0xff00) | ((address + 1) & 0xff));
         return low + (high << 8);
       }
-      case "pre_indexed_indirect": {
+      case "preIndexedIndirect": {
         const baseAddress = (this.fetch() + this.registers.indexX) & 0xff;
         const result = this.readWord(baseAddress);
         this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
         return result;
       }
-      case "post_indexed_indirect": {
+      case "postIndexedIndirect": {
         const baseAddress = this.fetch();
         const result =
           (this.readWord(baseAddress) + this.registers.indexY) & 0xffff;
@@ -890,13 +890,13 @@ export default class Cpu {
           (result & 0xff00) !== (this.registers.programCounter & 0xff00);
         return result;
       }
-      case "zero_page": {
+      case "zeroPage": {
         return this.fetch();
       }
-      case "zero_page_x": {
+      case "zeroPageX": {
         return (this.fetch() + this.registers.indexX) & 0xff;
       }
-      case "zero_page_y": {
+      case "zeroPageY": {
         return (this.fetch() + this.registers.indexY) & 0xff;
       }
     }

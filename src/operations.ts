@@ -7,7 +7,7 @@ const operations: Array<IOperation | null> = [
     name: "BRK"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "ORA"
   },
@@ -17,7 +17,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "SLO"
   },
@@ -27,17 +27,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "ORA"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "ASL"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "SLO"
   },
@@ -83,7 +83,7 @@ const operations: Array<IOperation | null> = [
     name: "BPL"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "ORA"
   },
@@ -93,7 +93,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "SLO"
   },
@@ -103,17 +103,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "ORA"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "ASL"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "SLO"
   },
@@ -123,7 +123,7 @@ const operations: Array<IOperation | null> = [
     name: "CLC"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "ORA"
   },
@@ -133,7 +133,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 7,
     name: "SLO"
   },
@@ -143,17 +143,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "ORA"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 6,
     name: "ASL"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "SLO"
   },
@@ -163,7 +163,7 @@ const operations: Array<IOperation | null> = [
     name: "JSR"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "AND"
   },
@@ -173,27 +173,27 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "RLA"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "BIT"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "AND"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "ROL"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "RLA"
   },
@@ -239,7 +239,7 @@ const operations: Array<IOperation | null> = [
     name: "BMI"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "AND"
   },
@@ -249,7 +249,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "RLA"
   },
@@ -259,17 +259,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "AND"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "ROL"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "RLA"
   },
@@ -279,7 +279,7 @@ const operations: Array<IOperation | null> = [
     name: "SEC"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "AND"
   },
@@ -289,7 +289,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 7,
     name: "RLA"
   },
@@ -299,17 +299,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "AND"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 6,
     name: "ROL"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "RLA"
   },
@@ -319,7 +319,7 @@ const operations: Array<IOperation | null> = [
     name: "RTI"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "EOR"
   },
@@ -329,7 +329,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "SRE"
   },
@@ -339,17 +339,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "EOR"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "LSR"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "SRE"
   },
@@ -395,7 +395,7 @@ const operations: Array<IOperation | null> = [
     name: "BVC"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "EOR"
   },
@@ -405,7 +405,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "SRE"
   },
@@ -415,17 +415,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "EOR"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "LSR"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "SRE"
   },
@@ -435,7 +435,7 @@ const operations: Array<IOperation | null> = [
     name: "CLI"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "EOR"
   },
@@ -445,7 +445,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 7,
     name: "SRE"
   },
@@ -455,17 +455,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "EOR"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 6,
     name: "LSR"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "SRE"
   },
@@ -475,7 +475,7 @@ const operations: Array<IOperation | null> = [
     name: "RTS"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "ADC"
   },
@@ -485,7 +485,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "RRA"
   },
@@ -495,17 +495,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "ADC"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "ROR"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "RRA"
   },
@@ -526,7 +526,7 @@ const operations: Array<IOperation | null> = [
   },
   null,
   {
-    addressingMode: "indirect_absolute",
+    addressingMode: "indirectAbsolute",
     cycle: 5,
     name: "JMP"
   },
@@ -551,7 +551,7 @@ const operations: Array<IOperation | null> = [
     name: "BVS"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "ADC"
   },
@@ -561,7 +561,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "RRA"
   },
@@ -571,17 +571,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "ADC"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "ROR"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "RRA"
   },
@@ -591,7 +591,7 @@ const operations: Array<IOperation | null> = [
     name: "SEI"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "ADC"
   },
@@ -601,7 +601,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 7,
     name: "RRA"
   },
@@ -611,17 +611,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "ADC"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 6,
     name: "ROR"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "RRA"
   },
@@ -631,7 +631,7 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "STA"
   },
@@ -641,27 +641,27 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "SAX"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "STY"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "STA"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "STX"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "SAX"
   },
@@ -707,7 +707,7 @@ const operations: Array<IOperation | null> = [
     name: "BCC"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 6,
     name: "STA"
   },
@@ -718,22 +718,22 @@ const operations: Array<IOperation | null> = [
   },
   null,
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "STY"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "STA"
   },
   {
-    addressingMode: "zero_page_y",
+    addressingMode: "zeroPageY",
     cycle: 4,
     name: "STX"
   },
   {
-    addressingMode: "zero_page_y",
+    addressingMode: "zeroPageY",
     cycle: 4,
     name: "SAX"
   },
@@ -743,7 +743,7 @@ const operations: Array<IOperation | null> = [
     name: "TYA"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "STA"
   },
@@ -755,7 +755,7 @@ const operations: Array<IOperation | null> = [
   null,
   null,
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "STA"
   },
@@ -767,7 +767,7 @@ const operations: Array<IOperation | null> = [
     name: "LDY"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "LDA"
   },
@@ -777,27 +777,27 @@ const operations: Array<IOperation | null> = [
     name: "LDX"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "LAX"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "LDY"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "LDA"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "LDX"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "LAX"
   },
@@ -843,7 +843,7 @@ const operations: Array<IOperation | null> = [
     name: "BCS"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "LDA"
   },
@@ -853,27 +853,27 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "LAX"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "LDY"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "LDA"
   },
   {
-    addressingMode: "zero_page_y",
+    addressingMode: "zeroPageY",
     cycle: 4,
     name: "LDX"
   },
   {
-    addressingMode: "zero_page_y",
+    addressingMode: "zeroPageY",
     cycle: 4,
     name: "LAX"
   },
@@ -883,7 +883,7 @@ const operations: Array<IOperation | null> = [
     name: "CLV"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "LDA"
   },
@@ -894,22 +894,22 @@ const operations: Array<IOperation | null> = [
   },
   null,
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "LDY"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "LDA"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "LDX"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "LAX"
   },
@@ -919,7 +919,7 @@ const operations: Array<IOperation | null> = [
     name: "CPY"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "CMP"
   },
@@ -929,27 +929,27 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "DCP"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "CPY"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "CMP"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "DEC"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "DCP"
   },
@@ -995,7 +995,7 @@ const operations: Array<IOperation | null> = [
     name: "BNE"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "CMP"
   },
@@ -1005,7 +1005,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "DCP"
   },
@@ -1015,17 +1015,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "CMP"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "DEC"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "DCP"
   },
@@ -1035,7 +1035,7 @@ const operations: Array<IOperation | null> = [
     name: "CLD"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "CMP"
   },
@@ -1045,7 +1045,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 2,
     name: "DCP"
   },
@@ -1055,17 +1055,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "CMP"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "DEC"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "DCP"
   },
@@ -1075,7 +1075,7 @@ const operations: Array<IOperation | null> = [
     name: "CPX"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 6,
     name: "SBC"
   },
@@ -1085,27 +1085,27 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "pre_indexed_indirect",
+    addressingMode: "preIndexedIndirect",
     cycle: 8,
     name: "ISB"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "CPX"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 3,
     name: "SBC"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "INC"
   },
   {
-    addressingMode: "zero_page",
+    addressingMode: "zeroPage",
     cycle: 5,
     name: "ISB"
   },
@@ -1155,7 +1155,7 @@ const operations: Array<IOperation | null> = [
     name: "BEQ"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 5,
     name: "SBC"
   },
@@ -1165,7 +1165,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "post_indexed_indirect",
+    addressingMode: "postIndexedIndirect",
     cycle: 8,
     name: "ISB"
   },
@@ -1175,17 +1175,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPD"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 4,
     name: "SBC"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "INC"
   },
   {
-    addressingMode: "zero_page_x",
+    addressingMode: "zeroPageX",
     cycle: 6,
     name: "ISB"
   },
@@ -1195,7 +1195,7 @@ const operations: Array<IOperation | null> = [
     name: "SED"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 4,
     name: "SBC"
   },
@@ -1205,7 +1205,7 @@ const operations: Array<IOperation | null> = [
     name: "NOP"
   },
   {
-    addressingMode: "absolute_y",
+    addressingMode: "absoluteY",
     cycle: 2,
     name: "ISB"
   },
@@ -1215,17 +1215,17 @@ const operations: Array<IOperation | null> = [
     name: "NOPI"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 4,
     name: "SBC"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "INC"
   },
   {
-    addressingMode: "absolute_x",
+    addressingMode: "absoluteX",
     cycle: 7,
     name: "ISB"
   }

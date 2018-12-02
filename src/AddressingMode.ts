@@ -1,16 +1,16 @@
 type addressingMode =
   | "absolute"
-  | "absolute_x"
-  | "absolute_y"
+  | "absoluteX"
+  | "absoluteY"
   | "accumulator"
   | "immediate"
   | "implied"
-  | "indirect_absolute"
-  | "post_indexed_indirect"
-  | "pre_indexed_indirect"
+  | "indirectAbsolute"
+  | "postIndexedIndirect"
+  | "preIndexedIndirect"
   | "relative"
-  | "zero_page"
-  | "zero_page_x"
-  | "zero_page_y";
+  | "zeroPage"
+  | "zeroPageX"
+  | "zeroPageY";
 
 export default addressingMode;
