@@ -46,7 +46,7 @@ export default class Cpu {
   }
 
   private execute(
-    operand: Uint8 | undefined,
+    operand: Uint16 | undefined,
     addressingMode: AddressingMode,
     operationName: OperationName
   ) {
