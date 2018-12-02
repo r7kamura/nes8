@@ -80,12 +80,4 @@ export default class CpuBus {
       throw new Error(`Invalid CPU bus address: ${address}`);
     }
   }
-
-  private tryToReadProgramRom(address: Uint16): Uint8 {
-    if (this.programRom) {
-      return this.programRom.read(address);
-    } else {
-      throw new Error(`Program ROM not connected`);
-    }
-  }
 }
