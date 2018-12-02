@@ -2,6 +2,7 @@ import Cpu from "./Cpu";
 import CpuBus from "./CpuBus";
 import DmaController from "./DmaController";
 import InterruptLine from "./InterruptLine";
+import Keypad from "./Keypad";
 import Ppu from "./Ppu";
 import PpuBus from "./PpuBus";
 import Ram from "./Ram";
@@ -16,6 +17,10 @@ export default class PartsFactory {
   public cachedDmaController?: DmaController;
 
   public cachedInterruptLine?: InterruptLine;
+
+  public cachedKeypad1?: Keypad;
+
+  public cachedKeypad2?: Keypad;
 
   public cachedPpu?: Ppu;
 
@@ -41,6 +46,8 @@ export default class PartsFactory {
       this.cachedCpuBus ||
       (this.cachedCpuBus = new CpuBus(
         this.dmaController(),
+        this.keypad1(),
+        this.keypad2(),
         this.ppu(),
         this.workingRam()
       ))
@@ -62,6 +69,14 @@ export default class PartsFactory {
       this.cachedInterruptLine ||
       (this.cachedInterruptLine = new InterruptLine())
     );
+  }
+
+  public keypad1(): Keypad {
+    return this.cachedKeypad1 || (this.cachedKeypad1 = new Keypad());
+  }
+
+  public keypad2(): Keypad {
+    return this.cachedKeypad2 || (this.cachedKeypad2 = new Keypad());
   }
 
   public ppu(): Ppu {
