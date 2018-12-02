@@ -837,69 +837,127 @@ export default class Cpu {
     return this.read(this.registers.programCounter++);
   }
 
-  private fetchOperand(addressingMode: AddressingMode): Uint16 | undefined {
+  private fetchOperand(
+    addressingMode: AddressingMode
+  ): Uint16 | Uint8 | undefined {
     switch (addressingMode) {
       case "absolute": {
-        return this.fetchWord();
+        return this.fetchOperandByAbsolute();
       }
       case "absoluteX": {
-        const baseAddress = this.fetchWord();
-        const result = baseAddress + this.registers.indexX;
-        this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
-        return result & 0xffff;
+        return this.fetchOperandByAbsoluteX();
       }
       case "absoluteY": {
-        const baseAddress = this.fetchWord();
-        const result = baseAddress + this.registers.indexY;
-        this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
-        return result & 0xffff;
+        return this.fetchOperandByAbsoluteY();
       }
       case "accumulator": {
-        return;
+        return this.fetchOperandByAccumulator();
       }
       case "immediate": {
-        return this.fetch();
+        return this.fetchOperandByImmediate();
       }
       case "implied": {
-        return;
+        return this.fetchOperandByImplied();
       }
       case "indirectAbsolute": {
-        const address = this.fetchWord();
-        const low = this.read(address);
-        const high = this.read((address & 0xff00) | ((address + 1) & 0xff));
-        return low + (high << 8);
+        return this.fetchOperandByIndirectAbsolute();
       }
       case "preIndexedIndirect": {
-        const baseAddress = (this.fetch() + this.registers.indexX) & 0xff;
-        const result = this.readWord(baseAddress);
-        this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
-        return result;
+        return this.fetchOperandByPreIndexedIndirect();
       }
       case "postIndexedIndirect": {
-        const baseAddress = this.fetch();
-        const result =
-          (this.readWord(baseAddress) + this.registers.indexY) & 0xffff;
-        this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
-        return result;
+        return this.fetchOperandByPostIndexedIndirect();
       }
       case "relative": {
-        const int8 = this.fetch();
-        const offset = int8 >= 0x80 ? int8 - 256 : int8;
-        const result = this.registers.programCounter + offset;
-        this.crossed =
-          (result & 0xff00) !== (this.registers.programCounter & 0xff00);
-        return result;
+        return this.fetchOperandByRelative();
       }
       case "zeroPage": {
-        return this.fetch();
+        return this.fetchOperandByZeroPage();
       }
       case "zeroPageX": {
-        return (this.fetch() + this.registers.indexX) & 0xff;
+        return this.fetchOperandByZeroPageX();
       }
       case "zeroPageY": {
-        return (this.fetch() + this.registers.indexY) & 0xff;
+        return this.fetchOperandByZeroPageY();
+      }
+      default: {
+        const exhaustiveCheck: never = addressingMode;
+        return;
       }
     }
+  }
+
+  private fetchOperandByAbsolute(): Uint16 {
+    return this.fetchWord();
+  }
+
+  private fetchOperandByAbsoluteX(): Uint16 {
+    const baseAddress = this.fetchWord();
+    const result = baseAddress + this.registers.indexX;
+    this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
+    return result & 0xffff;
+  }
+
+  private fetchOperandByAbsoluteY(): Uint16 {
+    const baseAddress = this.fetchWord();
+    const result = baseAddress + this.registers.indexY;
+    this.crossed = (baseAddress & 0xff00) !== (result & 0xff00);
+    return result & 0xffff;
+  }
+
+  private fetchOperandByAccumulator(): undefined {
+    return;
+  }
+
+  private fetchOperandByImmediate(): Uint16 {
+    return this.fetch();
+  }
+
+  private fetchOperandByImplied(): undefined {
+    return;
+  }
+
+  private fetchOperandByIndirectAbsolute(): Uint16 {
+    const address = this.fetchWord();
+    const low = this.read(address);
+    const high = this.read((address & 0xff00) | ((address + 1) & 0xff));
+    return low + (high << 8);
+  }
+
+  private fetchOperandByPreIndexedIndirect(): Uint16 {
+    const baseAddress = (this.fetch() + this.registers.indexX) & 0xff;
+    const result = this.readWord(baseAddress);
+    this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
+    return result;
+  }
+
+  private fetchOperandByPostIndexedIndirect(): Uint16 {
+    const baseAddress = this.fetch();
+    const result =
+      (this.readWord(baseAddress) + this.registers.indexY) & 0xffff;
+    this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
+    return result;
+  }
+
+  private fetchOperandByRelative(): Uint16 {
+    const int8 = this.fetch();
+    const offset = int8 >= 0x80 ? int8 - 256 : int8;
+    const result = this.registers.programCounter + offset;
+    this.crossed =
+      (result & 0xff00) !== (this.registers.programCounter & 0xff00);
+    return result;
+  }
+
+  private fetchOperandByZeroPage(): Uint8 {
+    return this.fetch();
+  }
+
+  private fetchOperandByZeroPageX(): Uint8 {
+    return (this.fetch() + this.registers.indexX) & 0xff;
+  }
+
+  private fetchOperandByZeroPageY(): Uint8 {
+    return (this.fetch() + this.registers.indexY) & 0xff;
   }
 
   private fetchOperation(): IOperation {
