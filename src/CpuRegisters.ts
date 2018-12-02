@@ -44,6 +44,14 @@ export default class CpuRegisters {
     this.toggleStatusBit(StatusIndex.Carry, value);
   }
 
+  get decimal(): boolean {
+    return this.maskStatusBit(StatusIndex.Decimal);
+  }
+
+  set decimal(value: boolean) {
+    this.toggleStatusBit(StatusIndex.Decimal, value);
+  }
+
   get interrupt(): boolean {
     return this.maskStatusBit(StatusIndex.Interrupt);
   }
@@ -66,6 +74,14 @@ export default class CpuRegisters {
 
   set overflow(value: boolean) {
     this.toggleStatusBit(StatusIndex.Overflow, value);
+  }
+
+  get reserved(): boolean {
+    return this.maskStatusBit(StatusIndex.Reserved);
+  }
+
+  set reserved(value: boolean) {
+    this.toggleStatusBit(StatusIndex.Reserved, value);
   }
 
   get zero(): boolean {
