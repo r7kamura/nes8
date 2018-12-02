@@ -57,7 +57,7 @@ export default class Cpu {
     return this.read(this.registers.programCounter++);
   }
 
-  private fetchOperand(addressingMode: AddressingMode): Uint8 | undefined {
+  private fetchOperand(addressingMode: AddressingMode): Uint16 | undefined {
     switch (addressingMode) {
       case "absolute": {
         return this.fetchWord();
