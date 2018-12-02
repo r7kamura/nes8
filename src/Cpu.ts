@@ -917,11 +917,21 @@ export default class Cpu {
   }
 
   private handleIrq() {
-    // TODO
+    this.interruptLine.deassertIrq();
+    this.registers.break = false;
+    this.pushWord(this.registers.programCounter);
+    this.push(this.registers.status);
+    this.registers.interrupt = true;
+    this.registers.programCounter = this.readWord(0xfffe);
   }
 
   private handleNmi() {
-    // TODO
+    this.interruptLine.deassertNmi();
+    this.registers.break = false;
+    this.pushWord(this.registers.programCounter);
+    this.push(this.registers.status);
+    this.registers.interrupt = true;
+    this.registers.programCounter = this.readWord(0xfffa);
   }
 
   private handleReset() {
