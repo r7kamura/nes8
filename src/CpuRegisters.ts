@@ -1,3 +1,4 @@
+import { composeBit, getBit } from "./registerUtilities";
 import { Uint16, Uint8 } from "./types";
 
 const enum CpuStatusIndex {
@@ -29,79 +30,70 @@ export default class CpuRegisters {
   }
 
   get break(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Break);
+    return getBit(this.status, CpuStatusIndex.Break);
   }
 
   set break(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Break, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Break, value);
   }
 
   get carry(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Carry);
+    return getBit(this.status, CpuStatusIndex.Carry);
   }
 
   set carry(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Carry, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Carry, value);
   }
 
   get decimal(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Decimal);
+    return getBit(this.status, CpuStatusIndex.Decimal);
   }
 
   set decimal(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Decimal, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Decimal, value);
   }
 
   get interrupt(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Interrupt);
+    return getBit(this.status, CpuStatusIndex.Interrupt);
   }
 
   set interrupt(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Interrupt, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Interrupt, value);
   }
 
   get negative(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Negative);
+    return getBit(this.status, CpuStatusIndex.Negative);
   }
 
   set negative(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Negative, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Negative, value);
   }
 
   get overflow(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Overflow);
+    return getBit(this.status, CpuStatusIndex.Overflow);
   }
 
   set overflow(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Overflow, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Overflow, value);
   }
 
   get reserved(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Reserved);
+    return getBit(this.status, CpuStatusIndex.Reserved);
   }
 
   set reserved(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Reserved, value);
+    this.status = composeBit(this.status, CpuStatusIndex.Reserved, value);
   }
 
   get zero(): boolean {
-    return this.maskStatusBit(CpuStatusIndex.Zero);
+    return getBit(this.status, CpuStatusIndex.Zero);
   }
 
   set zero(value: boolean) {
-    this.toggleStatusBit(CpuStatusIndex.Zero, value);
-  }
-
-  private maskStatusBit(index: CpuStatusIndex): boolean {
-    return (this.status & (1 << index)) !== 0;
+    this.status = composeBit(this.status, CpuStatusIndex.Zero, value);
   }
 
   private toggleStatusBit(index: CpuStatusIndex, value: boolean) {
-    const maskedByte = 1 << index;
-    if (value) {
-      this.status |= maskedByte;
-    } else {
-      this.status &= ~maskedByte;
-    }
+    this.status = composeBit(this.status, index, value);
   }
 }
