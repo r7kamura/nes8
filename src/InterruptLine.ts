@@ -6,20 +6,4 @@ export default class InterruptLine {
     this.irq = false;
     this.nmi = false;
   }
-
-  public assertIrq() {
-    this.irq = true;
-  }
-
-  public assertNmi() {
-    this.nmi = true;
-  }
-
-  public deassertIrq() {
-    this.irq = false;
-  }
-
-  public deassertNmi() {
-    this.nmi = false;
-  }
 }

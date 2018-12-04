@@ -975,7 +975,7 @@ export default class Cpu {
   }
 
   private handleIrq() {
-    this.interruptLine.deassertIrq();
+    this.interruptLine.irq = false;
     this.registers.break = false;
     this.pushWord(this.registers.programCounter);
     this.push(this.registers.status);
@@ -984,7 +984,7 @@ export default class Cpu {
   }
 
   private handleNmi() {
-    this.interruptLine.deassertNmi();
+    this.interruptLine.nmi = false;
     this.registers.break = false;
     this.pushWord(this.registers.programCounter);
     this.push(this.registers.status);
