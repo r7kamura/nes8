@@ -1,6 +1,6 @@
 import { Uint16, Uint8 } from "./types";
 
-const enum StatusIndex {
+const enum CpuStatusIndex {
   Carry,
   Zero,
   Interrupt,
@@ -29,74 +29,74 @@ export default class CpuRegisters {
   }
 
   get break(): boolean {
-    return this.maskStatusBit(StatusIndex.Break);
+    return this.maskStatusBit(CpuStatusIndex.Break);
   }
 
   set break(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Break, value);
+    this.toggleStatusBit(CpuStatusIndex.Break, value);
   }
 
   get carry(): boolean {
-    return this.maskStatusBit(StatusIndex.Carry);
+    return this.maskStatusBit(CpuStatusIndex.Carry);
   }
 
   set carry(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Carry, value);
+    this.toggleStatusBit(CpuStatusIndex.Carry, value);
   }
 
   get decimal(): boolean {
-    return this.maskStatusBit(StatusIndex.Decimal);
+    return this.maskStatusBit(CpuStatusIndex.Decimal);
   }
 
   set decimal(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Decimal, value);
+    this.toggleStatusBit(CpuStatusIndex.Decimal, value);
   }
 
   get interrupt(): boolean {
-    return this.maskStatusBit(StatusIndex.Interrupt);
+    return this.maskStatusBit(CpuStatusIndex.Interrupt);
   }
 
   set interrupt(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Interrupt, value);
+    this.toggleStatusBit(CpuStatusIndex.Interrupt, value);
   }
 
   get negative(): boolean {
-    return this.maskStatusBit(StatusIndex.Negative);
+    return this.maskStatusBit(CpuStatusIndex.Negative);
   }
 
   set negative(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Negative, value);
+    this.toggleStatusBit(CpuStatusIndex.Negative, value);
   }
 
   get overflow(): boolean {
-    return this.maskStatusBit(StatusIndex.Overflow);
+    return this.maskStatusBit(CpuStatusIndex.Overflow);
   }
 
   set overflow(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Overflow, value);
+    this.toggleStatusBit(CpuStatusIndex.Overflow, value);
   }
 
   get reserved(): boolean {
-    return this.maskStatusBit(StatusIndex.Reserved);
+    return this.maskStatusBit(CpuStatusIndex.Reserved);
   }
 
   set reserved(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Reserved, value);
+    this.toggleStatusBit(CpuStatusIndex.Reserved, value);
   }
 
   get zero(): boolean {
-    return this.maskStatusBit(StatusIndex.Zero);
+    return this.maskStatusBit(CpuStatusIndex.Zero);
   }
 
   set zero(value: boolean) {
-    this.toggleStatusBit(StatusIndex.Zero, value);
+    this.toggleStatusBit(CpuStatusIndex.Zero, value);
   }
 
-  private maskStatusBit(index: StatusIndex): boolean {
+  private maskStatusBit(index: CpuStatusIndex): boolean {
     return (this.status & (1 << index)) !== 0;
   }
 
-  private toggleStatusBit(index: StatusIndex, value: boolean) {
+  private toggleStatusBit(index: CpuStatusIndex, value: boolean) {
     const maskedByte = 1 << index;
     if (value) {
       this.status |= maskedByte;
