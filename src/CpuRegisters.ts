@@ -1,4 +1,4 @@
-import { composeBit, getBit } from "./registerUtilities";
+import { composeBit, getBit } from "./bitUtilities";
 import { Uint16, Uint8 } from "./types";
 
 const enum CpuStatusIndex {
