@@ -12,6 +12,6 @@ export default class Ram {
   }
 
   public write(address: Uint16, value: Uint8) {
-    return (this.bytes[address] = value);
+    this.bytes[address] = value;
   }
 }
