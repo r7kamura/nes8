@@ -1,11 +1,14 @@
+import CanvasRenderer from "./CanvasRenderer";
 import Cpu from "./Cpu";
 import CpuBus from "./CpuBus";
 import DmaController from "./DmaController";
 import InterruptLine from "./InterruptLine";
+import IRenderer from "./IRenderer";
 import Keypad from "./Keypad";
 import Ppu from "./Ppu";
 import PpuBus from "./PpuBus";
 import Ram from "./Ram";
+import TerminalRenderer from "./TerminalRenderer";
 
 export default class PartsFactory {
   public cachedCpu?: Cpu;
@@ -25,6 +28,8 @@ export default class PartsFactory {
   public cachedPpu?: Ppu;
 
   public cachedPpuBus?: PpuBus;
+
+  public cachedRenderer?: IRenderer;
 
   public cachedVideoRam?: Ram;
 
@@ -82,7 +87,11 @@ export default class PartsFactory {
   public ppu(): Ppu {
     return (
       this.cachedPpu ||
-      (this.cachedPpu = new Ppu(this.ppuBus(), this.interruptLine()))
+      (this.cachedPpu = new Ppu(
+        this.ppuBus(),
+        this.interruptLine(),
+        this.renderer()
+      ))
     );
   }
 
@@ -93,11 +102,37 @@ export default class PartsFactory {
     );
   }
 
+  public renderer(): IRenderer {
+    return (
+      this.cachedRenderer || (this.cachedRenderer = this.constructRenderer())
+    );
+  }
+
   public videoRam(): Ram {
     return this.cachedVideoRam || (this.cachedVideoRam = new Ram(8192));
   }
 
   public workingRam(): Ram {
     return this.cachedWorkingRam || (this.cachedWorkingRam = new Ram(2048));
+  }
+
+  private constructRenderer(): IRenderer {
+    return typeof window === "undefined"
+      ? new TerminalRenderer()
+      : new CanvasRenderer(this.findCanvasContext());
+  }
+
+  private findCanvasContext(): CanvasRenderingContext2D {
+    const element = document.getElementsByTagName("canvas")[0];
+    if (!element) {
+      throw new Error("HTML canvas element not found");
+    } else {
+      const canvasContext = element.getContext("2d");
+      if (canvasContext) {
+        return canvasContext;
+      } else {
+        throw new Error("Canvas context not found");
+      }
+    }
   }
 }
