@@ -1,6 +1,7 @@
 import { getBit } from "./bitUtilities";
 import Image from "./Image";
 import InterruptLine from "./InterruptLine";
+import IRenderer from "./IRenderer";
 import PpuBus from "./PpuBus";
 import PpuRegisters from "./PpuRegisters";
 import Ram from "./Ram";
@@ -34,7 +35,11 @@ export default class Ppu {
 
   private videoRamReadingBuffer: Uint8;
 
-  constructor(private bus: PpuBus, private interruptLine: InterruptLine) {
+  constructor(
+    private bus: PpuBus,
+    private interruptLine: InterruptLine,
+    private renderer: IRenderer
+  ) {
     this.cycle = 0;
     this.image = new Image(WINDOW_WIDTH, WINDOW_HEIGHT);
     this.line = 0;
@@ -295,7 +300,7 @@ export default class Ppu {
   }
 
   private renderImage() {
-    // TODO
+    this.renderer.render(this.image);
   }
 
   private writeToSpriteRamForCpu(value: Uint8) {

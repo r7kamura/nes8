@@ -3,7 +3,7 @@ import { Uint8 } from "./types";
 export default class Image {
   private colorCodes: Uint8[];
 
-  constructor(private width: number, private height: number) {
+  constructor(public width: number, public height: number) {
     this.colorCodes = new Array(width * height).fill(0);
   }
 
