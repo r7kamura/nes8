@@ -2,7 +2,7 @@
   "name": "nes8",
   "version": "0.1.0",
   "description": "A NES emulator written in TypeScript.",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write src/**/*.ts",
