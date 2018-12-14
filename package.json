@@ -4,10 +4,11 @@
   "description": "A NES emulator written in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "webpack",
     "format": "prettier --write src/**/*.ts",
     "lint": "tslint src/**/*.ts",
-    "test": "npm run lint && npm run build"
+    "test": "npm run lint && npm run build",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,12 @@
   "devDependencies": {
     "@types/node": "10.12.12",
     "prettier": "1.15.3",
+    "ts-loader": "5.3.1",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.17.0",
     "tslint-plugin-prettier": "2.0.1",
-    "typescript": "3.2.1"
+    "typescript": "3.2.1",
+    "webpack": "4.27.1",
+    "webpack-cli": "3.1.2"
   }
 }
