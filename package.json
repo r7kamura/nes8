@@ -4,9 +4,11 @@
   "description": "A NES emulator written in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
-    "build": "webpack",
-    "format": "prettier --write package.json src/**/*.ts webpack.config.js",
-    "lint": "tslint src/**/*.ts",
+    "build": "run-p build:cp build:webpack",
+    "build:cp": "mkdir -p dist && cp src/html/index.html dist/index.html",
+    "build:webpack": "webpack",
+    "format": "prettier --write package.json src/html/**/*.html src/ts/**/*.ts webpack.config.js",
+    "lint": "tslint src/ts/**/*.ts",
     "test": "npm run lint && npm run build",
     "watch": "webpack --watch"
   },
@@ -25,6 +27,7 @@
   "homepage": "https://github.com/r7kamura/nes8#readme",
   "devDependencies": {
     "@types/node": "10.12.12",
+    "npm-run-all": "4.1.5",
     "prettier": "1.15.3",
     "ts-loader": "5.3.1",
     "tslint": "5.11.0",
