@@ -1,18 +1,16 @@
 module.exports = {
-  mode: 'development',
+  mode: "development",
 
   module: {
     rules: [
       {
-        loader: 'ts-loader',
+        loader: "ts-loader",
         test: /\.ts$/
       }
     ]
   },
 
   resolve: {
-    extensions: [
-      '.ts'
-    ]
+    extensions: [".ts"]
   }
 };
