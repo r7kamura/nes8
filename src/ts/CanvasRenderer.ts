@@ -26,7 +26,8 @@ export default class CanvasRenderer {
   private drawPixel(pixelIndex: number, rgb: Rgb) {
     const imageDataIndex = pixelIndex * 4;
     this.imageData.data[imageDataIndex + RgbaIndex.Red] = rgb[RgbaIndex.Red];
-    this.imageData.data[imageDataIndex + RgbaIndex.Green] = rgb[RgbaIndex.Green];
+    this.imageData.data[imageDataIndex + RgbaIndex.Green] =
+      rgb[RgbaIndex.Green];
     this.imageData.data[imageDataIndex + RgbaIndex.Blue] = rgb[RgbaIndex.Blue];
     this.imageData.data[imageDataIndex + RgbaIndex.Alpha] = ALPHA;
   }
