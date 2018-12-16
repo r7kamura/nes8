@@ -20,7 +20,9 @@ npm run build
 
 ### Run the emulator on your web browser
 
-TBD.
+```
+npm run serve
+```
 
 ### Format source code
 
