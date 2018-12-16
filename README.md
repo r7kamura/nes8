@@ -18,7 +18,7 @@ npm install
 npm run build
 ```
 
-### Run the emulator on your web browser
+### Run emulator on your web browser
 
 ```
 npm run serve
