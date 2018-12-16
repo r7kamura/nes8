@@ -44,7 +44,7 @@ export default class CpuBus {
     } else if (address >= 0xc000 && address < 0x10000) {
       if (this.programRom) {
         return this.programRom.read(
-          address - this.programRom.bytesize > 16 * 2 ** 10 ? 0x8000 : 0xc000
+          address - (this.programRom.bytesize > 16 * 2 ** 10 ? 0x8000 : 0xc000)
         );
       } else {
         throw new Error(`Program ROM not connected`);
