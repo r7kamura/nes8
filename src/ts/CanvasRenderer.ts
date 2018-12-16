@@ -23,18 +23,21 @@ export default class CanvasRenderer {
     this.updateCanvas();
   }
 
-  private drawPixel(index: number, rgb: Rgb) {
-    this.imageData.data[index + RgbaIndex.Red] = rgb[RgbaIndex.Red];
-    this.imageData.data[index + RgbaIndex.Green] = rgb[RgbaIndex.Green];
-    this.imageData.data[index + RgbaIndex.Blue] = rgb[RgbaIndex.Blue];
-    this.imageData.data[index + RgbaIndex.Alpha] = ALPHA;
+  private drawPixel(pixelIndex: number, rgb: Rgb) {
+    const imageDataIndex = pixelIndex * 4;
+    this.imageData.data[imageDataIndex + RgbaIndex.Red] = rgb[RgbaIndex.Red];
+    this.imageData.data[imageDataIndex + RgbaIndex.Green] = rgb[RgbaIndex.Green];
+    this.imageData.data[imageDataIndex + RgbaIndex.Blue] = rgb[RgbaIndex.Blue];
+    this.imageData.data[imageDataIndex + RgbaIndex.Alpha] = ALPHA;
   }
 
   private drawPixels(image: Image) {
     for (let y = 0; y < image.height; y++) {
       const offset = image.height * y;
       for (let x = 0; x < image.width; x++) {
-        this.drawPixel(offset + x, colors[image.read(x, y)]);
+        const colorCode = image.read(x, y);
+        const rgb = colors[colorCode];
+        this.drawPixel(offset + x, rgb);
       }
     }
   }
