@@ -1028,7 +1028,7 @@ export default class Cpu {
 
   private readWord(address: Uint16): Uint16 {
     const low = this.read(address);
-    const high = this.read((address + 1) & 0xff);
+    const high = this.read((address + 1) & 0xffff);
     return low + (high << 8);
   }
 
