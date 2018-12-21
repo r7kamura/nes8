@@ -49,9 +49,9 @@ export default class Emulator {
     }
   }
 
-  private loop() {
+  private loop = () => {
     this.frame();
-    this.loop();
+    requestAnimationFrame(this.loop);
   };
 
   private reset() {
