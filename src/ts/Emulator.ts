@@ -6,6 +6,8 @@ import Ppu from "./Ppu";
 import PpuBus from "./PpuBus";
 import RomLoader from "./RomLoader";
 
+const CPU_CYCLES_COUNT_PER_FRAME = 30972;
+
 export default class Emulator {
   public cpu: Cpu;
 
@@ -34,20 +36,34 @@ export default class Emulator {
 
   public run() {
     this.reset();
+    this.loop();
+  }
+
+  private frame() {
+    let cpuCyclesCount = 0;
     while (true) {
-      this.step();
+      cpuCyclesCount += this.step();
+      if (cpuCyclesCount >= CPU_CYCLES_COUNT_PER_FRAME) {
+        break;
+      }
     }
   }
+
+  private loop() {
+    this.frame();
+    this.loop();
+  };
 
   private reset() {
     this.cpu.reset();
   }
 
-  private step() {
+  private step(): number {
     this.dmaController.transferIfRequested();
-    const cyclesCount = this.cpu.step();
-    for (let i = 0; i < cyclesCount * 3; i++) {
+    const cpuCyclesCount = this.cpu.step();
+    for (let i = 0; i < cpuCyclesCount * 3; i++) {
       this.ppu.step();
     }
+    return cpuCyclesCount;
   }
 }
