@@ -103,4 +103,17 @@ export default class PpuRegisters {
   public baseNameTableId(): Uint8 {
     return this.control & 0b11;
   }
+
+  public incrementVideoRamAddress(offset: number) {
+    this.videoRamAddress = (this.videoRamAddress + offset) & 0xffff;
+  }
+
+  public setVideoRamAddress(value: Uint8) {
+    if (this.latch) {
+      this.videoRamAddress = value + (this.buffer << 8);
+    } else {
+      this.buffer = value;
+    }
+    this.latch = !this.latch;
+  }
 }

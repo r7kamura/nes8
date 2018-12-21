@@ -104,7 +104,7 @@ export default class Ppu {
         break;
       }
       case 0x0006: {
-        this.registers.videoRamAddress = value;
+        this.registers.setVideoRamAddress(value);
         break;
       }
       case 0x0007: {
@@ -252,7 +252,7 @@ export default class Ppu {
   private readBackgroundPatternIndex(): Uint16 {
     return this.bus.read(
       0x2000 +
-        this.registers.baseNameTableId() * 0x400 +
+        this.registers.baseNameTableId() * 0x0400 +
         this.backgroundPatternIndex()
     );
   }
@@ -311,10 +311,10 @@ export default class Ppu {
 
   private writeToVideoRamForCpu(value: Uint8) {
     this.bus.write(this.registers.videoRamAddress, value);
-    this.registers.videoRamAddress += this.registers.horizontalIncrement
+    const offset = this.registers.horizontalIncrement
       ? WINDOW_WIDTH / TILE_WIDTH
       : 1;
-    this.registers.videoRamAddress &= 0xffff;
+    this.registers.incrementVideoRamAddress(offset);
   }
 
   private x(): number {
