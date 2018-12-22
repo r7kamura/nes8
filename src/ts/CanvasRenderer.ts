@@ -34,7 +34,7 @@ export default class CanvasRenderer {
 
   private drawPixels(image: Image) {
     for (let y = 0; y < image.height; y++) {
-      const offset = image.height * y;
+      const offset = image.width * y;
       for (let x = 0; x < image.width; x++) {
         const colorCode = image.read(x, y);
         const rgb = colors[colorCode];
