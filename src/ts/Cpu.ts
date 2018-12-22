@@ -509,7 +509,7 @@ export default class Cpu {
   }
 
   private executeDEY(operand: Uint16) {
-    const result = (this.registers.indexX - 1) & 0xff;
+    const result = (this.registers.indexY - 1) & 0xff;
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.indexY = result;
