@@ -7,5 +7,6 @@ fetch("nestest.nes")
   .then(buffer => {
     const emulator = new Emulator();
     emulator.load(buffer);
+    document.addEventListener("keydown", emulator.keypad1.onKeyDown);
     emulator.run();
   });

@@ -10,6 +10,11 @@ import PpuBus from "./PpuBus";
 import Ram from "./Ram";
 import TerminalRenderer from "./TerminalRenderer";
 
+const KEYS1 = [190, 188, 78, 77, 87, 83, 65, 87];
+
+// TODO
+const KEYS2 = [190, 188, 78, 77, 87, 83, 65, 87];
+
 export default class PartsFactory {
   public cachedCpu?: Cpu;
 
@@ -77,11 +82,11 @@ export default class PartsFactory {
   }
 
   public keypad1(): Keypad {
-    return this.cachedKeypad1 || (this.cachedKeypad1 = new Keypad());
+    return this.cachedKeypad1 || (this.cachedKeypad1 = new Keypad(KEYS1));
   }
 
   public keypad2(): Keypad {
-    return this.cachedKeypad2 || (this.cachedKeypad2 = new Keypad());
+    return this.cachedKeypad2 || (this.cachedKeypad2 = new Keypad(KEYS2));
   }
 
   public ppu(): Ppu {

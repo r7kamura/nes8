@@ -1,6 +1,7 @@
 import Cpu from "./Cpu";
 import CpuBus from "./CpuBus";
 import DmaController from "./DmaController";
+import Keypad from "./Keypad";
 import PartsFactory from "./PartsFactory";
 import Ppu from "./Ppu";
 import PpuBus from "./PpuBus";
@@ -9,21 +10,27 @@ import RomLoader from "./RomLoader";
 const CPU_CYCLES_COUNT_PER_FRAME = 30972;
 
 export default class Emulator {
-  public cpu: Cpu;
+  public keypad1: Keypad;
 
-  public cpuBus: CpuBus;
+  public keypad2: Keypad;
 
-  public dmaController: DmaController;
+  private cpu: Cpu;
 
-  public ppu: Ppu;
+  private cpuBus: CpuBus;
 
-  public ppuBus: PpuBus;
+  private dmaController: DmaController;
+
+  private ppu: Ppu;
+
+  private ppuBus: PpuBus;
 
   constructor() {
     const partsFactory = new PartsFactory();
     this.cpu = partsFactory.cpu();
     this.cpuBus = partsFactory.cpuBus();
     this.dmaController = partsFactory.dmaController();
+    this.keypad1 = partsFactory.keypad1();
+    this.keypad2 = partsFactory.keypad2();
     this.ppu = partsFactory.ppu();
     this.ppuBus = partsFactory.ppuBus();
   }
