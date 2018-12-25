@@ -942,7 +942,7 @@ export default class Cpu {
 
   private fetchOperandByPreIndexedIndirect(): Uint16 {
     const baseAddress = (this.fetch() + this.registers.indexX) & 0xff;
-    const result = this.readWord(baseAddress);
+    const result = this.readWordWithWrapAround(baseAddress);
     this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
     return result;
   }
@@ -950,7 +950,8 @@ export default class Cpu {
   private fetchOperandByPostIndexedIndirect(): Uint16 {
     const baseAddress = this.fetch();
     const result =
-      (this.readWord(baseAddress) + this.registers.indexY) & 0xffff;
+      (this.readWordWithWrapAround(baseAddress) + this.registers.indexY) &
+      0xffff;
     this.crossed = (result & 0xff00) !== (baseAddress & 0xff00);
     return result;
   }
@@ -1045,6 +1046,12 @@ export default class Cpu {
   private readWord(address: Uint16): Uint16 {
     const low = this.read(address);
     const high = this.read((address + 1) & 0xffff);
+    return low + (high << 8);
+  }
+
+  private readWordWithWrapAround(address: Uint16): Uint16 {
+    const low = this.read(address);
+    const high = this.read((address + 1) & 0xff);
     return low + (high << 8);
   }
 
