@@ -15,8 +15,24 @@ function isNegative(value: number): boolean {
   return (value & 0x80) !== 0;
 }
 
-function isOverflow(left: Uint8, right: Uint8, result: number): boolean {
-  return !isNegative(left ^ right) && isNegative(left ^ result);
+function isOverflowOnAddition(
+  left: Uint8,
+  right: Uint8,
+  result: number
+): boolean {
+  return isSameSign(left, right) && !isSameSign(left, result);
+}
+
+function isOverflowOnSubtraction(
+  left: Uint8,
+  right: Uint8,
+  result: number
+): boolean {
+  return !isSameSign(left, result) && !isSameSign(left, right);
+}
+
+function isSameSign(a: Uint8, b: Uint8): boolean {
+  return !isNegative(a ^ b);
 }
 
 function isZero(value: number): boolean {
@@ -343,7 +359,7 @@ export default class Cpu {
       this.registers.accumulator + operand + (this.registers.carry ? 1 : 0);
     this.registers.carry = isCarry(result);
     this.registers.negative = isNegative(result);
-    this.registers.overflow = isOverflow(
+    this.registers.overflow = isOverflowOnAddition(
       this.registers.accumulator,
       operand,
       result
@@ -550,7 +566,7 @@ export default class Cpu {
       (~value & 0xff) +
       this.registers.accumulator +
       (this.registers.carry ? 1 : 0);
-    this.registers.overflow = isOverflow(
+    this.registers.overflow = isOverflowOnAddition(
       this.registers.accumulator,
       value,
       result
@@ -708,7 +724,7 @@ export default class Cpu {
     const result = this.registers.accumulator + value + (readValue & 1);
     this.registers.carry = isCarry(result);
     this.registers.negative = isNegative(result);
-    this.registers.overflow = isOverflow(
+    this.registers.overflow = isOverflowOnAddition(
       this.registers.accumulator,
       value,
       result
@@ -740,9 +756,11 @@ export default class Cpu {
       this.registers.accumulator - operand + (this.registers.carry ? 0 : -1);
     this.registers.carry = result >= 0;
     this.registers.negative = isNegative(result);
-    this.registers.overflow =
-      ((this.registers.accumulator ^ result) & 0x80) !== 0 &&
-      ((this.registers.accumulator ^ operand) & 0x80) !== 0;
+    this.registers.overflow = isOverflowOnSubtraction(
+      this.registers.accumulator,
+      operand,
+      result
+    );
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
   }
