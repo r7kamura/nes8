@@ -737,7 +737,7 @@ export default class Cpu {
   private executeSBC(operand: Uint16, addressingMode: AddressingMode) {
     operand = this.resolveOperand(operand, addressingMode);
     const result =
-      this.registers.accumulator - operand - 1 + (this.registers.carry ? 1 : 0);
+      this.registers.accumulator - operand + (this.registers.carry ? 0 : -1);
     this.registers.carry = result >= 0;
     this.registers.negative = isNegative(result);
     this.registers.overflow =
