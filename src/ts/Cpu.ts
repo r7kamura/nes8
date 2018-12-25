@@ -15,12 +15,24 @@ function isNegative(value: number): boolean {
   return (value & 0x80) !== 0;
 }
 
-function isOverflowOnAddition(left: Uint8, right: Uint8, result: number): boolean {
-  return !isNegative(left ^ right) && isNegative(left ^ result);
+function isOverflowOnAddition(
+  left: Uint8,
+  right: Uint8,
+  result: number
+): boolean {
+  return isSameSign(left, right) && !isSameSign(left, result);
 }
 
-function isOverflowOnSubtraction(left: Uint8, right: Uint8, result: number): boolean {
-  return isNegative(left ^ result) && isNegative(left ^ right);
+function isOverflowOnSubtraction(
+  left: Uint8,
+  right: Uint8,
+  result: number
+): boolean {
+  return !isSameSign(left, result) && !isSameSign(left, right);
+}
+
+function isSameSign(a: Uint8, b: Uint8): boolean {
+  return !isNegative(a ^ b);
 }
 
 function isZero(value: number): boolean {
