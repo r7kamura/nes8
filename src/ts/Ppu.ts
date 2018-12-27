@@ -81,6 +81,11 @@ export default class Ppu {
     }
   }
 
+  public transferSpriteData(index: number, value: Uint8) {
+    const address = (this.registers.spriteRamAddress + index) & 0xff;
+    this.spriteRam.write(address, value);
+  }
+
   public write(address: Uint16, value: Uint8) {
     switch (address) {
       case 0x0000: {
