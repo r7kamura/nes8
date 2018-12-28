@@ -23,8 +23,6 @@ export default class PpuRegisters {
 
   public mask: Uint8;
 
-  public status: Uint8;
-
   public scrollX: Uint8;
 
   public scrollY: Uint8;
@@ -36,6 +34,8 @@ export default class PpuRegisters {
   private buffer: Uint8;
 
   private latch: boolean;
+
+  private status: Uint8;
 
   constructor() {
     this.control = 0;
@@ -102,6 +102,13 @@ export default class PpuRegisters {
 
   public baseNameTableId(): Uint8 {
     return this.control & 0b11;
+  }
+
+  public getStatus(): Uint8 {
+    const value = this.status;
+    this.inVBlank = false;
+    this.latch = false;
+    return value;
   }
 
   public incrementVideoRamAddress() {

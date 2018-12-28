@@ -57,7 +57,7 @@ export default class Ppu {
         return this.registers.mask;
       }
       case 0x0002: {
-        return this.registers.status;
+        return this.registers.getStatus();
       }
       case 0x0004: {
         return this.readFromSpriteRam(this.registers.spriteRamAddress);
