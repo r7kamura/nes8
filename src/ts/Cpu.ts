@@ -390,7 +390,7 @@ export default class Cpu {
       this.registers.carry = isCarry(result);
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
-      this.write(operand, result & 0xff);
+      this.bus.write(operand, result & 0xff);
     }
   }
 
@@ -507,14 +507,14 @@ export default class Cpu {
     const subResult = (this.registers.accumulator - result) & 0xff;
     this.registers.negative = isNegative(subResult);
     this.registers.zero = isZero(subResult);
-    this.write(operand, result);
+    this.bus.write(operand, result);
   }
 
   private executeDEC(operand: Uint16) {
     const result = (this.bus.read(operand) - 1) & 0xff;
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
-    this.write(operand, result);
+    this.bus.write(operand, result);
   }
 
   private executeDEX(operand: Uint16) {
@@ -543,7 +543,7 @@ export default class Cpu {
     const result = (this.bus.read(operand) + 1) & 0xff;
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
-    this.write(operand, result);
+    this.bus.write(operand, result);
   }
 
   private executeINX(operand: Uint16) {
@@ -575,7 +575,7 @@ export default class Cpu {
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
-    this.write(operand, value);
+    this.bus.write(operand, value);
   }
 
   private executeJMP(operand: Uint16) {
@@ -630,7 +630,7 @@ export default class Cpu {
       this.registers.carry = (value & 1) === 1;
       this.registers.negative = false;
       this.registers.zero = isZero(result);
-      this.write(operand, result);
+      this.bus.write(operand, result);
     }
   }
 
@@ -680,7 +680,7 @@ export default class Cpu {
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
-    this.write(operand, value & 0xff);
+    this.bus.write(operand, value & 0xff);
   }
 
   private executeROL(operand: Uint16, addressingMode: AddressingMode) {
@@ -697,7 +697,7 @@ export default class Cpu {
       this.registers.carry = (value & 0x80) !== 0;
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
-      this.write(operand, result);
+      this.bus.write(operand, result);
     }
   }
 
@@ -715,7 +715,7 @@ export default class Cpu {
       this.registers.carry = (value & 1) === 1;
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
-      this.write(operand, result);
+      this.bus.write(operand, result);
     }
   }
 
@@ -732,7 +732,7 @@ export default class Cpu {
     );
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
-    this.write(operand, value);
+    this.bus.write(operand, value);
   }
 
   private executeRTI() {
@@ -748,7 +748,7 @@ export default class Cpu {
 
   private executeSAX(operand: Uint16) {
     const result = this.registers.accumulator & this.registers.indexX;
-    this.write(operand, result);
+    this.bus.write(operand, result);
   }
 
   private executeSBC(operand: Uint16, addressingMode: AddressingMode) {
@@ -785,7 +785,7 @@ export default class Cpu {
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
-    this.write(operand, value & 0xff);
+    this.bus.write(operand, value & 0xff);
   }
 
   private executeSRE(operand: Uint16) {
@@ -796,19 +796,19 @@ export default class Cpu {
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.accumulator = result & 0xff;
-    this.write(operand, value);
+    this.bus.write(operand, value);
   }
 
   private executeSTA(operand: Uint16) {
-    this.write(operand, this.registers.accumulator);
+    this.bus.write(operand, this.registers.accumulator);
   }
 
   private executeSTX(operand: Uint16) {
-    this.write(operand, this.registers.indexX);
+    this.bus.write(operand, this.registers.indexX);
   }
 
   private executeSTY(operand: Uint16) {
-    this.write(operand, this.registers.indexY);
+    this.bus.write(operand, this.registers.indexY);
   }
 
   private executeTAX() {
@@ -1030,7 +1030,7 @@ export default class Cpu {
   }
 
   private push(value: Uint8) {
-    this.write(this.registers.stackPointer, value);
+    this.bus.write(this.registers.stackPointer, value);
     this.registers.stackPointer =
       ((this.registers.stackPointer - 1) % 0x100) + 0x100;
   }
@@ -1069,9 +1069,5 @@ export default class Cpu {
     if (this.registers.interrupt && this.interruptLine.irq) {
       this.handleIrq();
     }
-  }
-
-  private write(address: Uint16, value: Uint8) {
-    this.bus.write(address, value);
   }
 }
