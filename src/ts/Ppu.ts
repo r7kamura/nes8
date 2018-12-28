@@ -316,10 +316,7 @@ export default class Ppu {
 
   private writeToVideoRamForCpu(value: Uint8) {
     this.bus.write(this.registers.videoRamAddress, value);
-    const offset = this.registers.horizontalIncrement
-      ? WINDOW_WIDTH / TILE_WIDTH
-      : 1;
-    this.registers.incrementVideoRamAddress(offset);
+    this.registers.incrementVideoRamAddress();
   }
 
   private x(): number {

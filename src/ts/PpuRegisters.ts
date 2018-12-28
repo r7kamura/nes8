@@ -104,8 +104,8 @@ export default class PpuRegisters {
     return this.control & 0b11;
   }
 
-  public incrementVideoRamAddress(offset: number) {
-    this.videoRamAddress = (this.videoRamAddress + offset) & 0xffff;
+  public incrementVideoRamAddress() {
+    this.videoRamAddress += this.horizontalIncrement ? 32 : 1;
   }
 
   public setVideoRamAddress(value: Uint8) {
