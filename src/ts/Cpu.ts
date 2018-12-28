@@ -385,7 +385,7 @@ export default class Cpu {
       this.registers.zero = isZero(result);
       this.registers.accumulator = result & 0xff;
     } else {
-      const value = this.read(operand);
+      const value = this.bus.read(operand);
       const result = value << 1;
       this.registers.carry = isCarry(result);
       this.registers.negative = isNegative(result);
@@ -413,7 +413,7 @@ export default class Cpu {
   }
 
   private executeBIT(operand: Uint16) {
-    const value = this.read(operand);
+    const value = this.bus.read(operand);
     const result = this.registers.accumulator & value;
     this.registers.negative = isNegative(value);
     this.registers.overflow = (value & 0x40) !== 0;
@@ -503,7 +503,7 @@ export default class Cpu {
   }
 
   private executeDCP(operand: Uint16) {
-    const result = (this.read(operand) - 1) & 0xff;
+    const result = (this.bus.read(operand) - 1) & 0xff;
     const subResult = (this.registers.accumulator - result) & 0xff;
     this.registers.negative = isNegative(subResult);
     this.registers.zero = isZero(subResult);
@@ -511,7 +511,7 @@ export default class Cpu {
   }
 
   private executeDEC(operand: Uint16) {
-    const result = (this.read(operand) - 1) & 0xff;
+    const result = (this.bus.read(operand) - 1) & 0xff;
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.write(operand, result);
@@ -540,7 +540,7 @@ export default class Cpu {
   }
 
   private executeINC(operand: Uint16) {
-    const result = (this.read(operand) + 1) & 0xff;
+    const result = (this.bus.read(operand) + 1) & 0xff;
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.write(operand, result);
@@ -561,7 +561,7 @@ export default class Cpu {
   }
 
   private executeISB(operand: Uint16) {
-    const value = (this.read(operand) + 1) & 0xff;
+    const value = (this.bus.read(operand) + 1) & 0xff;
     const result =
       (~value & 0xff) +
       this.registers.accumulator +
@@ -588,7 +588,7 @@ export default class Cpu {
   }
 
   private executeLAX(operand: Uint16) {
-    const result = this.read(operand);
+    const result = this.bus.read(operand);
     this.registers.negative = isNegative(result);
     this.registers.zero = isZero(result);
     this.registers.accumulator = result;
@@ -625,7 +625,7 @@ export default class Cpu {
       this.registers.zero = isZero(result);
       this.registers.accumulator = result;
     } else {
-      const value = this.read(operand);
+      const value = this.bus.read(operand);
       const result = value >> 1;
       this.registers.carry = (value & 1) === 1;
       this.registers.negative = false;
@@ -673,7 +673,8 @@ export default class Cpu {
   }
 
   private executeRLA(operand: Uint16) {
-    const value = (this.read(operand) << 1) + (this.registers.carry ? 1 : 0);
+    const value =
+      (this.bus.read(operand) << 1) + (this.registers.carry ? 1 : 0);
     const result = value & this.registers.accumulator;
     this.registers.carry = (value & 0x100) !== 0;
     this.registers.negative = isNegative(result);
@@ -691,7 +692,7 @@ export default class Cpu {
       this.registers.zero = isZero(result);
       this.registers.accumulator = result;
     } else {
-      const value = this.read(operand);
+      const value = this.bus.read(operand);
       const result = (value << 1) | (this.registers.carry ? 1 : 0);
       this.registers.carry = (value & 0x80) !== 0;
       this.registers.negative = isNegative(result);
@@ -709,7 +710,7 @@ export default class Cpu {
       this.registers.zero = isZero(result);
       this.registers.accumulator = result;
     } else {
-      const value = this.read(operand);
+      const value = this.bus.read(operand);
       const result = (value >> 1) | ((this.registers.carry ? 1 : 0) << 7);
       this.registers.carry = (value & 1) === 1;
       this.registers.negative = isNegative(result);
@@ -719,7 +720,7 @@ export default class Cpu {
   }
 
   private executeRRA(operand: Uint16) {
-    const readValue = this.read(operand);
+    const readValue = this.bus.read(operand);
     const value = (readValue >> 1) | ((this.registers.carry ? 1 : 0) << 7);
     const result = this.registers.accumulator + value + (readValue & 1);
     this.registers.carry = isCarry(result);
@@ -778,7 +779,7 @@ export default class Cpu {
   }
 
   private executeSLO(operand: Uint16) {
-    const value = this.read(operand) << 1;
+    const value = this.bus.read(operand) << 1;
     const result = this.registers.accumulator | value;
     this.registers.carry = isCarry(result);
     this.registers.negative = isNegative(result);
@@ -788,7 +789,7 @@ export default class Cpu {
   }
 
   private executeSRE(operand: Uint16) {
-    const readValue = this.read(operand);
+    const readValue = this.bus.read(operand);
     const value = readValue >> 1;
     const result = this.registers.accumulator ^ value;
     this.registers.carry = (readValue & 1) === 1;
@@ -850,7 +851,7 @@ export default class Cpu {
   }
 
   private fetch(): Uint16 {
-    return this.read(this.registers.programCounter++);
+    return this.bus.read(this.registers.programCounter++);
   }
 
   private fetchOperand(
@@ -935,8 +936,8 @@ export default class Cpu {
 
   private fetchOperandByIndirectAbsolute(): Uint16 {
     const address = this.fetchWord();
-    const low = this.read(address);
-    const high = this.read((address & 0xff00) | ((address + 1) & 0xff));
+    const low = this.bus.read(address);
+    const high = this.bus.read((address & 0xff00) | ((address + 1) & 0xff));
     return low + (high << 8);
   }
 
@@ -1021,7 +1022,7 @@ export default class Cpu {
   private pop(): Uint8 {
     this.registers.stackPointer =
       ((this.registers.stackPointer + 1) % 0x100) + 0x100;
-    return this.read(this.registers.stackPointer);
+    return this.bus.read(this.registers.stackPointer);
   }
 
   private popWord(): Uint16 {
@@ -1039,19 +1040,15 @@ export default class Cpu {
     this.push(value & 0xff);
   }
 
-  private read(address: Uint16): Uint8 {
-    return this.bus.read(address);
-  }
-
   private readWord(address: Uint16): Uint16 {
-    const low = this.read(address);
-    const high = this.read((address + 1) & 0xffff);
+    const low = this.bus.read(address);
+    const high = this.bus.read((address + 1) & 0xffff);
     return low + (high << 8);
   }
 
   private readWordWithWrapAround(address: Uint16): Uint16 {
-    const low = this.read(address);
-    const high = this.read((address + 1) & 0xff);
+    const low = this.bus.read(address);
+    const high = this.bus.read((address + 1) & 0xff);
     return low + (high << 8);
   }
 
@@ -1061,7 +1058,7 @@ export default class Cpu {
   ): Uint16 {
     return addressingMode === "immediate"
       ? addressOrImmediateValue
-      : this.read(addressOrImmediateValue);
+      : this.bus.read(addressOrImmediateValue);
   }
 
   private scanIrqAndNmi() {
