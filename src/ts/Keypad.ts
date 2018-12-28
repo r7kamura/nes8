@@ -31,7 +31,7 @@ export default class Keypad {
 
   public onKeyDown = (event: KeyboardEvent) => {
     const index = this.keyMap[event.keyCode];
-    if (index) {
+    if (typeof index !== "undefined") {
       this.buffer |= 1 << index;
     }
   };
