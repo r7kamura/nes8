@@ -290,6 +290,7 @@ export default class Ppu {
         this.registers.videoRamAddress
       );
     }
+    this.registers.incrementVideoRamAddress();
     return value;
   }
 
