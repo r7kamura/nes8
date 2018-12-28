@@ -10,10 +10,10 @@ import PpuBus from "./PpuBus";
 import Ram from "./Ram";
 import TerminalRenderer from "./TerminalRenderer";
 
-const KEYS1 = [190, 188, 78, 77, 87, 83, 65, 87];
+const KEYS1 = [190, 188, 78, 77, 87, 83, 65, 68];
 
 // TODO
-const KEYS2 = [190, 188, 78, 77, 87, 83, 65, 87];
+const KEYS2 = [190, 188, 78, 77, 87, 83, 65, 68];
 
 export default class PartsFactory {
   public cachedCpu?: Cpu;
