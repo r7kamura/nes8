@@ -277,20 +277,19 @@ export default class Ppu {
   }
 
   private readFromVideoRamForCpu(): Uint8 {
-    let value;
+    const readValue = this.bus.read(this.registers.videoRamAddress);
+    let returnedValue;
     if (this.paletteDataRequested()) {
-      value = this.bus.read(this.registers.videoRamAddress);
+      returnedValue = readValue;
       this.videoRamReadingBuffer = this.bus.read(
         this.registers.videoRamAddress - 0x1000
       );
     } else {
-      value = this.videoRamReadingBuffer;
-      this.videoRamReadingBuffer = this.bus.read(
-        this.registers.videoRamAddress
-      );
+      returnedValue = this.videoRamReadingBuffer;
+      this.videoRamReadingBuffer = readValue;
     }
     this.registers.incrementVideoRamAddress();
-    return value;
+    return returnedValue;
   }
 
   private readPaletteId(): number {
