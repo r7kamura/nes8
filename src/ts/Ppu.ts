@@ -166,18 +166,18 @@ export default class Ppu {
     const patternIndex = this.readBackgroundPatternIndex();
     const patternLineLowAddress =
       TILE_HEIGHT * 2 * patternIndex + this.yInTile();
-    const patternLineLow = this.readBackgroundPatternLine(
+    const patternLineLowByte = this.readBackgroundPatternLine(
       patternLineLowAddress
     );
-    const patternLineHigh = this.readBackgroundPatternLine(
+    const patternLineHighByte = this.readBackgroundPatternLine(
       patternLineLowAddress + TILE_HEIGHT
     );
     const paletteId = this.readPaletteId();
     for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
-      const patternLineIndex = TILE_WIDTH - 1 - xInPattern;
+      const patternLineByteIndex = TILE_WIDTH - 1 - xInPattern;
       const paletteIndex =
-        (getBit(patternLineLow, patternLineIndex) ? 1 : 0) |
-        ((getBit(patternLineHigh, patternLineIndex) ? 1 : 0) << 1) |
+        (getBit(patternLineLowByte, patternLineByteIndex) ? 1 : 0) |
+        ((getBit(patternLineHighByte, patternLineByteIndex) ? 1 : 0) << 1) |
         (paletteId << 2);
       this.image.write(
         this.x() + xInPattern,
