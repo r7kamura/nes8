@@ -41,7 +41,7 @@ export default class PartsFactory {
   public cachedWorkingRam?: Ram;
 
   public characterRam(): Ram {
-    return this.cachedCharacterRam || (this.cachedCharacterRam = new Ram(4096));
+    return this.cachedCharacterRam || (this.cachedCharacterRam = new Ram(8192));
   }
 
   public cpu(): Cpu {
