@@ -72,10 +72,28 @@ export default class Ppu {
   }
 
   public step() {
-    this.callbackBeforeCycleIncremented();
+    if (this.onDrawableCycle()) {
+      this.drawBackground8pixels();
+    }
     if (this.onRightEndCycle()) {
       this.cycle = 0;
-      this.callbackAfterCycleCleared();
+      if (this.onBottomEndLine()) {
+        this.line = 0;
+        this.interruptLine.nmi = false;
+        this.registers.spriteHit = false;
+        this.registers.inVBlank = false;
+        this.drawSprites();
+        this.renderImage();
+      } else {
+        this.line++;
+        this.registers.spriteHit = this.onSpriteHit();
+        if (this.onLineToStartVBlank()) {
+          this.registers.inVBlank = true;
+          if (this.registers.vBlankInterruptEnabled) {
+            this.interruptLine.nmi = true;
+          }
+        }
+      }
     } else {
       this.cycle++;
     }
@@ -142,40 +160,6 @@ export default class Ppu {
     );
   }
 
-  private callbackAfterCycleCleared() {
-    if (this.onBottomEndLine()) {
-      this.line = 0;
-      this.callbackAfterLineCleared();
-    } else {
-      this.line++;
-      this.callbackAfterLineIncremented();
-    }
-  }
-
-  private callbackAfterLineCleared() {
-    this.interruptLine.nmi = false;
-    this.registers.spriteHit = false;
-    this.registers.inVBlank = false;
-    this.drawSprites();
-    this.renderImage();
-  }
-
-  private callbackAfterLineIncremented() {
-    this.registers.spriteHit = this.onSpriteHit();
-    if (this.onLineToStartVBlank()) {
-      this.registers.inVBlank = true;
-      if (this.registers.vBlankInterruptEnabled) {
-        this.interruptLine.nmi = true;
-      }
-    }
-  }
-
-  private callbackBeforeCycleIncremented() {
-    if (this.inVisibleWindow() && this.x() % 8 === 0) {
-      this.drawBackground8pixels();
-    }
-  }
-
   private drawBackground8pixels() {
     const patternIndex = this.readBackgroundPatternIndex();
     const patternLineLowAddress =
@@ -216,6 +200,10 @@ export default class Ppu {
 
   private onBottomEndLine(): boolean {
     return this.line === WINDOW_HEIGHT + V_BLANK_LENGTH - 1;
+  }
+
+  private onDrawableCycle(): boolean {
+    return this.inVisibleWindow() && this.x() % 8 === 0;
   }
 
   private onLineToStartVBlank(): boolean {
