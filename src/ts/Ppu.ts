@@ -182,7 +182,7 @@ export default class Ppu {
       this.image.write(
         this.x() + xInPattern,
         this.y(),
-        this.readColorCode(paletteIndex)
+        this.readColorCodeForBackground(paletteIndex)
       );
     }
   }
@@ -258,7 +258,7 @@ export default class Ppu {
     return this.bus.read(offset + address);
   }
 
-  private readColorCode(index: Uint8): Uint8 {
+  private readColorCodeForBackground(index: Uint8): Uint8 {
     return this.bus.read(0x3f00 + index);
   }
 
