@@ -235,8 +235,7 @@ export default class Ppu {
   }
 
   private paletteDataRequested(): boolean {
-    const address = this.registers.videoRamAddress % 0x4000;
-    return address >= 0x3f00 && address < 0x3f20;
+    return this.registers.videoRamAddress % 0x4000 >= 0x3f00;
   }
 
   private patternPage(): number {
