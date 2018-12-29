@@ -62,7 +62,7 @@ export default class Ppu {
         return this.registers.getStatus();
       }
       case 0x0004: {
-        return this.readFromSpriteRam(this.registers.spriteRamAddress);
+        return this.spriteRam.read(this.registers.spriteRamAddress);
       }
       case 0x0007: {
         return this.readFromVideoRamForCpu();
@@ -218,7 +218,7 @@ export default class Ppu {
 
   private onSpriteHit(): boolean {
     return (
-      this.readFromSpriteRam(0) === this.yWithScroll() &&
+      this.spriteRam.read(0) === this.yWithScroll() &&
       this.registers.backgroundEnabled &&
       this.registers.spriteEnabled
     );
@@ -260,10 +260,6 @@ export default class Ppu {
 
   private readColorCode(index: Uint8): Uint8 {
     return this.bus.read(0x3f00 + index);
-  }
-
-  private readFromSpriteRam(address: Uint16): Uint8 {
-    return this.spriteRam.read(address);
   }
 
   private readFromVideoRamForCpu(): Uint8 {
