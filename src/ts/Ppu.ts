@@ -22,6 +22,8 @@ const WINDOW_WIDTH = 256;
 const H_BLANK_LENGTH = 101;
 const V_BLANK_LENGTH = 21;
 
+const SPRITES_RAM_BYTESIZE = 256;
+
 export default class Ppu {
   private cycle: number;
 
@@ -44,7 +46,7 @@ export default class Ppu {
     this.image = new Image(WINDOW_WIDTH, WINDOW_HEIGHT);
     this.line = 0;
     this.registers = new PpuRegisters();
-    this.spriteRam = new Ram(256);
+    this.spriteRam = new Ram(SPRITES_RAM_BYTESIZE);
     this.videoRamReadingBuffer = 0x00;
   }
 
