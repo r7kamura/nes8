@@ -72,10 +72,28 @@ export default class Ppu {
   }
 
   public step() {
-    this.callbackBeforeCycleIncremented();
+    if (this.onDrawableCycle()) {
+      this.drawBackground8pixels();
+    }
     if (this.onRightEndCycle()) {
       this.cycle = 0;
-      this.callbackAfterCycleCleared();
+      if (this.onBottomEndLine()) {
+        this.line = 0;
+        this.interruptLine.nmi = false;
+        this.registers.spriteHit = false;
+        this.registers.inVBlank = false;
+        this.drawSprites();
+        this.renderImage();
+      } else {
+        this.line++;
+        this.registers.spriteHit = this.onSpriteHit();
+        if (this.onLineToStartVBlank()) {
+          this.registers.inVBlank = true;
+          if (this.registers.vBlankInterruptEnabled) {
+            this.interruptLine.nmi = true;
+          }
+        }
+      }
     } else {
       this.cycle++;
     }
@@ -142,40 +160,6 @@ export default class Ppu {
     );
   }
 
-  private callbackAfterCycleCleared() {
-    if (this.onBottomEndLine()) {
-      this.line = 0;
-      this.callbackAfterLineCleared();
-    } else {
-      this.line++;
-      this.callbackAfterLineIncremented();
-    }
-  }
-
-  private callbackAfterLineCleared() {
-    this.interruptLine.nmi = false;
-    this.registers.spriteHit = false;
-    this.registers.inVBlank = false;
-    this.drawSprites();
-    this.renderImage();
-  }
-
-  private callbackAfterLineIncremented() {
-    this.registers.spriteHit = this.onSpriteHit();
-    if (this.onLineToStartVBlank()) {
-      this.registers.inVBlank = true;
-      if (this.registers.vBlankInterruptEnabled) {
-        this.interruptLine.nmi = true;
-      }
-    }
-  }
-
-  private callbackBeforeCycleIncremented() {
-    if (this.inVisibleWindow() && this.x() % 8 === 0) {
-      this.drawBackground8pixels();
-    }
-  }
-
   private drawBackground8pixels() {
     const patternIndex = this.readBackgroundPatternIndex();
     const patternLineLowAddress =
@@ -218,6 +202,10 @@ export default class Ppu {
     return this.line === WINDOW_HEIGHT + V_BLANK_LENGTH - 1;
   }
 
+  private onDrawableCycle(): boolean {
+    return this.inVisibleWindow() && this.x() % 8 === 0;
+  }
+
   private onLineToStartVBlank(): boolean {
     return this.line === WINDOW_HEIGHT;
   }
@@ -235,8 +223,7 @@ export default class Ppu {
   }
 
   private paletteDataRequested(): boolean {
-    const address = this.registers.videoRamAddress % 0x4000;
-    return address >= 0x3f00 && address < 0x3f20;
+    return this.registers.videoRamAddress % 0x4000 >= 0x3f00;
   }
 
   private patternPage(): number {
@@ -278,20 +265,19 @@ export default class Ppu {
   }
 
   private readFromVideoRamForCpu(): Uint8 {
-    let value;
+    const readValue = this.bus.read(this.registers.videoRamAddress);
+    let returnedValue;
     if (this.paletteDataRequested()) {
-      value = this.bus.read(this.registers.videoRamAddress);
+      returnedValue = readValue;
       this.videoRamReadingBuffer = this.bus.read(
         this.registers.videoRamAddress - 0x1000
       );
     } else {
-      value = this.videoRamReadingBuffer;
-      this.videoRamReadingBuffer = this.bus.read(
-        this.registers.videoRamAddress
-      );
+      returnedValue = this.videoRamReadingBuffer;
+      this.videoRamReadingBuffer = readValue;
     }
     this.registers.incrementVideoRamAddress();
-    return value;
+    return returnedValue;
   }
 
   private readPaletteId(): number {
