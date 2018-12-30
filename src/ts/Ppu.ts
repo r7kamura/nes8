@@ -240,7 +240,7 @@ export default class Ppu {
   }
 
   private readAttribute(): Uint8 {
-    return this.bus.read(this.calculateAttributeIndex());
+    return this.bus.read(0x23c0 + this.calculateAttributeIndex());
   }
 
   private readBackgroundPatternIndex(): Uint16 {
