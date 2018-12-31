@@ -144,8 +144,8 @@ export default class Ppu {
 
   private backgroundPatternIndex(): number {
     return (
-      Math.floor(this.yWithScroll() / TILE_HEIGHT) * 32 +
-      Math.floor(this.xWithScroll() / TILE_WIDTH) +
+      (this.yOfTile() % 30) * 32 +
+      (this.xOfTile() % 32) +
       this.patternPagingOffset()
     );
   }
@@ -308,6 +308,12 @@ export default class Ppu {
     return this.cycle - 1;
   }
 
+  private xInAttributeTable(): number {
+    return Math.floor(
+      (this.xWithScroll() % WINDOW_WIDTH) / ATTRIBUTE_TABLE_ELEMENT_WIDTH
+    );
+  }
+
   private xInTile(): number {
     return this.xWithScroll() % TILE_WIDTH;
   }
@@ -316,10 +322,8 @@ export default class Ppu {
     return Math.floor((this.xWithScroll() % WINDOW_WIDTH) / BLOCK_WIDTH);
   }
 
-  private xInAttributeTable(): number {
-    return Math.floor(
-      (this.xWithScroll() % WINDOW_WIDTH) / ATTRIBUTE_TABLE_ELEMENT_WIDTH
-    );
+  private xOfTile(): number {
+    return Math.floor(this.xWithScroll() / TILE_WIDTH);
   }
 
   private xWithScroll(): number {
@@ -342,6 +346,10 @@ export default class Ppu {
 
   private yOfBlock(): number {
     return Math.floor((this.yWithScroll() % WINDOW_HEIGHT) / BLOCK_HEIGHT);
+  }
+
+  private yOfTile(): number {
+    return Math.floor(this.yWithScroll() / TILE_HEIGHT);
   }
 
   private yWithScroll(): number {
