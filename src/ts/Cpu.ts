@@ -687,14 +687,14 @@ export default class Cpu {
     if (addressingMode === "accumulator") {
       const value = this.registers.accumulator;
       const result = ((value << 1) | (this.registers.carry ? 1 : 0)) & 0xff;
-      this.registers.carry = (value & 0x80) !== 0;
+      this.registers.carry = isNegative(value);
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
       this.registers.accumulator = result;
     } else {
       const value = this.bus.read(operand);
       const result = ((value << 1) | (this.registers.carry ? 1 : 0)) & 0xff;
-      this.registers.carry = (value & 0x80) !== 0;
+      this.registers.carry = isNegative(value);
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
       this.bus.write(operand, result);
