@@ -24,6 +24,8 @@ const V_BLANK_LENGTH = 21;
 
 const SPRITES_RAM_BYTESIZE = 256;
 
+const NAME_TABLE_ADDRESS_OFFSET = 0x2000;
+
 export default class Ppu {
   private cycle: number;
 
@@ -291,7 +293,7 @@ export default class Ppu {
 
   private readBackgroundPatternIndex(): Uint16 {
     return this.bus.read(
-      0x2000 +
+      NAME_TABLE_ADDRESS_OFFSET +
         this.registers.baseNameTableId() * 0x0400 +
         this.backgroundPatternIndex()
     );
