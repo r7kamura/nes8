@@ -686,14 +686,14 @@ export default class Cpu {
   private executeROL(operand: Uint16, addressingMode: AddressingMode) {
     if (addressingMode === "accumulator") {
       const value = this.registers.accumulator;
-      const result = (value << 1) | (this.registers.carry ? 1 : 0);
+      const result = ((value << 1) | (this.registers.carry ? 1 : 0)) & 0xff;
       this.registers.carry = (value & 0x80) !== 0;
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
       this.registers.accumulator = result;
     } else {
       const value = this.bus.read(operand);
-      const result = (value << 1) | (this.registers.carry ? 1 : 0);
+      const result = ((value << 1) | (this.registers.carry ? 1 : 0)) & 0xff;
       this.registers.carry = (value & 0x80) !== 0;
       this.registers.negative = isNegative(result);
       this.registers.zero = isZero(result);
