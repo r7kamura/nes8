@@ -158,8 +158,8 @@ export default class Ppu {
 
   private calculateAttributeIndex(): number {
     return (
-      this.xInAttributeTable() * 8 +
-      this.yInAttributeTable() +
+      (this.xOfAttributeTable() % 8) * 8 +
+      (this.yOfAttributeTable() % 8) +
       this.patternPagingOffset()
     );
   }
@@ -278,8 +278,8 @@ export default class Ppu {
 
   private patternPage(): number {
     return (
-      Math.floor(this.xWithScroll() / WINDOW_WIDTH) +
-      Math.floor(this.yWithScroll() / WINDOW_HEIGHT) * 2
+      (this.xWithScroll() >= WINDOW_WIDTH ? 1 : 0) +
+      (this.yWithScroll() >= WINDOW_HEIGHT ? 2 : 0)
     );
   }
 
@@ -360,18 +360,16 @@ export default class Ppu {
     return this.cycle - 1;
   }
 
-  private xInAttributeTable(): number {
-    return Math.floor(
-      (this.xWithScroll() % WINDOW_WIDTH) / ATTRIBUTE_TABLE_ELEMENT_WIDTH
-    );
-  }
-
   private xInTile(): number {
     return this.xWithScroll() % TILE_WIDTH;
   }
 
+  private xOfAttributeTable(): number {
+    return Math.floor(this.xWithScroll() / ATTRIBUTE_TABLE_ELEMENT_WIDTH);
+  }
+
   private xOfBlock(): number {
-    return Math.floor((this.xWithScroll() % WINDOW_WIDTH) / BLOCK_WIDTH);
+    return Math.floor(this.xWithScroll() / BLOCK_WIDTH);
   }
 
   private xOfTile(): number {
@@ -386,18 +384,16 @@ export default class Ppu {
     return this.line;
   }
 
-  private yInAttributeTable(): number {
-    return Math.floor(
-      (this.yWithScroll() % WINDOW_HEIGHT) / ATTRIBUTE_TABLE_ELEMENT_HEIGHT
-    );
-  }
-
   private yInTile(): number {
     return this.yWithScroll() % TILE_HEIGHT;
   }
 
+  private yOfAttributeTable(): number {
+    return Math.floor(this.yWithScroll() / ATTRIBUTE_TABLE_ELEMENT_HEIGHT);
+  }
+
   private yOfBlock(): number {
-    return Math.floor((this.yWithScroll() % WINDOW_HEIGHT) / BLOCK_HEIGHT);
+    return Math.floor(this.yWithScroll() / BLOCK_HEIGHT);
   }
 
   private yOfTile(): number {
