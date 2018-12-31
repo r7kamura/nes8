@@ -188,7 +188,53 @@ export default class Ppu {
   }
 
   private drawSprites() {
-    // TODO
+    for (
+      let baseAddress = 0;
+      baseAddress < SPRITES_RAM_BYTESIZE;
+      baseAddress += 4
+    ) {
+      const spriteY = this.spriteRam.read(baseAddress);
+      const patternIndex = this.spriteRam.read(baseAddress + 1);
+      const attributeByte = this.spriteRam.read(baseAddress + 2);
+      const spriteX = this.spriteRam.read(baseAddress + 3);
+
+      const paletteId = attributeByte & 0b11;
+      const reversedHorizontally = getBit(attributeByte, 6);
+      const reversedVertically = getBit(attributeByte, 7);
+
+      for (let yInPattern = 0; yInPattern < TILE_HEIGHT; yInPattern++) {
+        const patternLineLowByteAddress =
+          TILE_HEIGHT * 2 * patternIndex + yInPattern;
+        const patternLineHighByteAddress =
+          patternLineLowByteAddress + TILE_HEIGHT;
+        const patternLineLowByte = this.readSpritePatternLine(
+          patternLineLowByteAddress
+        );
+        const patternLineHighByte = this.readSpritePatternLine(
+          patternLineHighByteAddress
+        );
+        for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
+          const patternLineByteIndex = TILE_WIDTH - 1 - xInPattern;
+          const paletteIndex =
+            (getBit(patternLineLowByte, patternLineByteIndex) ? 1 : 0) |
+            ((getBit(patternLineHighByte, patternLineByteIndex) ? 1 : 0) << 1) |
+            (paletteId << 2);
+          if (paletteIndex % 4 !== 0) {
+            this.image.write(
+              spriteX +
+                (reversedHorizontally
+                  ? TILE_WIDTH - 1 - xInPattern
+                  : xInPattern),
+              spriteY +
+                (reversedVertically
+                  ? TILE_HEIGHT - 1 - yInPattern
+                  : yInPattern),
+              this.readColorCodeForSprite(paletteIndex)
+            );
+          }
+        }
+      }
+    }
   }
 
   private inVisibleWindow(): boolean {
@@ -260,6 +306,10 @@ export default class Ppu {
 
   private readColorCodeForBackground(index: Uint8): Uint8 {
     return this.bus.read(0x3f00 + index);
+  }
+
+  private readColorCodeForSprite(index: Uint8): Uint8 {
+    return this.bus.read(0x3f10 + index);
   }
 
   private readFromVideoRamForCpu(): Uint8 {
