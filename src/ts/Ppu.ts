@@ -70,7 +70,7 @@ export default class Ppu {
         return this.readFromVideoRamForCpu();
       }
       default: {
-        throw new Error(`Invalid PPU read address: ${address}`);
+        return 0;
       }
     }
   }
