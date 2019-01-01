@@ -144,6 +144,14 @@ export default class Ppu {
     }
   }
 
+  private attributeIndex(): number {
+    return (
+      (this.xOfAttributeTable() % 8) * 8 +
+      (this.yOfAttributeTable() % 8) +
+      this.patternPagingOffset()
+    );
+  }
+
   private backgroundPatternIndex(): number {
     return (
       (this.yOfTile() % 30) * 32 +
@@ -154,14 +162,6 @@ export default class Ppu {
 
   private blockPositionId(): number {
     return (this.xOfBlock() % 2) + (this.yOfBlock() % 2) * 2;
-  }
-
-  private calculateAttributeIndex(): number {
-    return (
-      (this.xOfAttributeTable() % 8) * 8 +
-      (this.yOfAttributeTable() % 8) +
-      this.patternPagingOffset()
-    );
   }
 
   private drawBackground8pixels() {
@@ -288,7 +288,7 @@ export default class Ppu {
   }
 
   private readAttribute(): Uint8 {
-    return this.bus.read(0x23c0 + this.calculateAttributeIndex());
+    return this.bus.read(0x23c0 + this.attributeIndex());
   }
 
   private readBackgroundPatternIndex(): Uint16 {
