@@ -146,8 +146,8 @@ export default class Ppu {
 
   private attributeIndex(): number {
     return (
-      (this.xOfAttributeTable() % 8) * 8 +
-      (this.yOfAttributeTable() % 8) +
+      (this.yOfAttributeTable() % 8) * 8 +
+      (this.xOfAttributeTable() % 8) +
       this.patternPagingOffset()
     );
   }
