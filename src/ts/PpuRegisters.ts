@@ -24,11 +24,11 @@ export default class PpuRegisters {
 
   public mask: Uint8;
 
+  public oamAddress: Uint8;
+
   public scrollX: Uint8;
 
   public scrollY: Uint8;
-
-  public spriteRamAddress: Uint8;
 
   public videoRamAddress: Uint16;
 
@@ -46,7 +46,7 @@ export default class PpuRegisters {
     this.scrollX = 0;
     this.scrollY = 0;
 
-    this.spriteRamAddress = 0;
+    this.oamAddress = 0;
     this.videoRamAddress = 0;
 
     this.buffer = 0;

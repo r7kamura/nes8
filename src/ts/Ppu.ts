@@ -55,19 +55,19 @@ export default class Ppu {
   public read(address: Uint16): Uint8 {
     switch (address) {
       case 0x0000: {
-        return this.registers.control;
+        return this.readControl();
       }
       case 0x0001: {
-        return this.registers.mask;
+        return this.readMask();
       }
       case 0x0002: {
-        return this.registers.getStatus();
+        return this.readStatus();
       }
       case 0x0004: {
-        return this.spriteRam.read(this.registers.spriteRamAddress);
+        return this.readOamData();
       }
       case 0x0007: {
-        return this.readFromVideoRamForCpu();
+        return this.readData();
       }
       default: {
         return 0;
@@ -104,38 +104,38 @@ export default class Ppu {
   }
 
   public transferSpriteData(index: number, value: Uint8) {
-    const address = (this.registers.spriteRamAddress + index) & 0xff;
+    const address = (this.registers.oamAddress + index) & 0xff;
     this.spriteRam.write(address, value);
   }
 
   public write(address: Uint16, value: Uint8) {
     switch (address) {
       case 0x0000: {
-        this.registers.control = value;
+        this.writeControl(value);
         break;
       }
       case 0x0001: {
-        this.registers.mask = value;
+        this.writeMask(value);
         break;
       }
       case 0x0003: {
-        this.registers.spriteRamAddress = value;
+        this.writeOamAddress(value);
         break;
       }
       case 0x0004: {
-        this.writeToSpriteRamForCpu(value);
+        this.writeOamData(value);
         break;
       }
       case 0x0005: {
-        this.registers.scroll = value;
+        this.writeScroll(value);
         break;
       }
       case 0x0006: {
-        this.registers.setVideoRamAddress(value);
+        this.writeVideoRamAddress(value);
         break;
       }
       case 0x0007: {
-        this.writeToVideoRamForCpu(value);
+        this.writeData(value);
         break;
       }
       default: {
@@ -314,7 +314,11 @@ export default class Ppu {
     return this.bus.read(0x3f10 + index);
   }
 
-  private readFromVideoRamForCpu(): Uint8 {
+  private readControl(): Uint8 {
+    return this.registers.control;
+  }
+
+  private readData(): Uint8 {
     const readValue = this.bus.read(this.registers.videoRamAddress);
     let returnedValue;
     if (this.paletteDataRequested()) {
@@ -330,6 +334,14 @@ export default class Ppu {
     return returnedValue;
   }
 
+  private readMask(): Uint8 {
+    return this.registers.mask;
+  }
+
+  private readOamData(): Uint8 {
+    return this.spriteRam.read(this.registers.oamAddress);
+  }
+
   private readPaletteId(): number {
     return (this.readAttribute() >> (this.blockPositionId() * 2)) & 0b11;
   }
@@ -341,19 +353,42 @@ export default class Ppu {
     return this.bus.read(offset + address);
   }
 
+  private readStatus(): Uint8 {
+    return this.registers.getStatus();
+  }
+
   private renderImage() {
     this.renderer.render(this.image);
   }
 
-  private writeToSpriteRamForCpu(value: Uint8) {
-    this.spriteRam.write(this.registers.spriteRamAddress, value);
-    this.registers.spriteRamAddress++;
-    this.registers.spriteRamAddress &= 0xff;
+  private writeControl(value: Uint8) {
+    this.registers.control = value;
   }
 
-  private writeToVideoRamForCpu(value: Uint8) {
+  private writeData(value: Uint8) {
     this.bus.write(this.registers.videoRamAddress, value);
     this.registers.incrementVideoRamAddress();
+  }
+
+  private writeMask(value: Uint8) {
+    this.registers.mask = value;
+  }
+
+  private writeOamAddress(value: Uint8) {
+    this.registers.oamAddress = value;
+  }
+
+  private writeOamData(value: Uint8) {
+    this.spriteRam.write(this.registers.oamAddress, value);
+    this.registers.oamAddress = (this.registers.oamAddress + 1) & 0xff;
+  }
+
+  private writeScroll(value: Uint8) {
+    this.registers.scroll = value;
+  }
+
+  private writeVideoRamAddress(value: Uint8) {
+    this.registers.setVideoRamAddress(value);
   }
 
   private x(): number {
