@@ -101,6 +101,7 @@ export default class PpuRegisters {
     return getBit(this.control, PpuControlIndex.VBlankIrqEnabled);
   }
 
+  // @return {Integer} 0-3
   public baseNameTableId(): Uint8 {
     return this.control & 0b11;
   }

@@ -142,12 +142,9 @@ export default class Ppu {
     }
   }
 
+  // @return {Integer} 0-63
   private attributeIndex(): number {
-    return (
-      (this.yOfAttributeTable() % 8) * 8 +
-      (this.xOfAttributeTable() % 8) +
-      this.patternPagingOffset()
-    );
+    return (this.yOfAttributeTable() % 8) * 8 + (this.xOfAttributeTable() % 8);
   }
 
   private backgroundPatternIndex(): number {
@@ -238,7 +235,11 @@ export default class Ppu {
   }
 
   private fetchAttributeTableByte(): Uint8 {
-    return this.bus.read(0x23c0 + this.attributeIndex());
+    return this.bus.read(
+      0x23c0 +
+        this.attributeIndex() +
+        this.patternPagingOffset()
+    );
   }
 
   private fetchBackgroundPatternLine(address: Uint16): Uint8 {
@@ -251,10 +252,9 @@ export default class Ppu {
   private fetchNameTableByte(): Uint8 {
     return this.bus.read(
       0x2000 +
-        ((this.yOfTile() % 30) * 32 +
-          (this.xOfTile() % 32) +
-          this.patternPagingOffset()) +
-        this.registers.baseNameTableId() * 0x0400
+        this.registers.baseNameTableId() * 0x0400 +
+        this.nameIndex() +
+        this.patternPagingOffset()
     );
   }
 
@@ -278,6 +278,10 @@ export default class Ppu {
       this.y() >= 0 &&
       this.y() < WINDOW_HEIGHT
     );
+  }
+
+  private nameIndex(): number {
+    return (this.yOfTile() % 30) * 32 + (this.xOfTile() % 32);
   }
 
   private onBottomEndLine(): boolean {
