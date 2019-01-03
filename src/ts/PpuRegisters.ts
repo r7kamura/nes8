@@ -14,7 +14,8 @@ const enum PpuMaskIndex {
 }
 
 const enum PpuStatusIndex {
-  SpriteHit = 6,
+  SpriteOverflow = 5,
+  SpriteHit,
   InVBlank
 }
 
