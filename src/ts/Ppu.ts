@@ -24,8 +24,6 @@ const V_BLANK_LENGTH = 21;
 
 const SPRITES_RAM_BYTESIZE = 256;
 
-const NAME_TABLE_ADDRESS_OFFSET = 0x2000;
-
 export default class Ppu {
   private cycle: number;
 
@@ -160,7 +158,7 @@ export default class Ppu {
     );
   }
 
-  private blockPositionId(): number {
+  private blockPositionIndex(): number {
     return (this.xOfBlock() % 2) + (this.yOfBlock() % 2) * 2;
   }
 
@@ -168,13 +166,13 @@ export default class Ppu {
     const patternIndex = this.fetchNameTableByte();
     const patternLineLowAddress =
       TILE_HEIGHT * 2 * patternIndex + this.yInTile();
-    const patternLineLowByte = this.readBackgroundPatternLine(
+    const patternLineLowByte = this.fetchBackgroundPatternLine(
       patternLineLowAddress
     );
-    const patternLineHighByte = this.readBackgroundPatternLine(
+    const patternLineHighByte = this.fetchBackgroundPatternLine(
       patternLineLowAddress + TILE_HEIGHT
     );
-    const paletteId = this.readPaletteId();
+    const paletteId = this.fetchPaletteId();
     for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
       const patternLineByteIndex = TILE_WIDTH - 1 - xInPattern;
       const paletteIndex =
@@ -209,10 +207,10 @@ export default class Ppu {
           TILE_HEIGHT * 2 * patternIndex + yInPattern;
         const patternLineHighByteAddress =
           patternLineLowByteAddress + TILE_HEIGHT;
-        const patternLineLowByte = this.readSpritePatternLine(
+        const patternLineLowByte = this.fetchSpritePatternLine(
           patternLineLowByteAddress
         );
-        const patternLineHighByte = this.readSpritePatternLine(
+        const patternLineHighByte = this.fetchSpritePatternLine(
           patternLineHighByteAddress
         );
         for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
@@ -237,6 +235,40 @@ export default class Ppu {
         }
       }
     }
+  }
+
+  private fetchAttributeTableByte(): Uint8 {
+    return this.bus.read(0x23c0 + this.attributeIndex());
+  }
+
+  private fetchBackgroundPatternLine(address: Uint16): Uint8 {
+    return this.bus.read(
+      (this.registers.backgroundPatternTableAddressBanked ? 0x1000 : 0x0000) +
+        address
+    );
+  }
+
+  private fetchNameTableByte(): Uint8 {
+    return this.bus.read(
+      0x2000 +
+        ((this.yOfTile() % 30) * 32 +
+          (this.xOfTile() % 32) +
+          this.patternPagingOffset()) +
+        this.registers.baseNameTableId() * 0x0400
+    );
+  }
+
+  private fetchPaletteId(): number {
+    return (
+      (this.fetchAttributeTableByte() >> (this.blockPositionIndex() * 2)) & 0b11
+    );
+  }
+
+  private fetchSpritePatternLine(address: Uint16): Uint8 {
+    const offset = this.registers.spritePatternTableAddressBanked
+      ? 0x1000
+      : 0x0000;
+    return this.bus.read(offset + address);
   }
 
   private inVisibleWindow(): boolean {
@@ -287,25 +319,6 @@ export default class Ppu {
     return this.patternPage() * 0x0400;
   }
 
-  private readAttribute(): Uint8 {
-    return this.bus.read(0x23c0 + this.attributeIndex());
-  }
-
-  private fetchNameTableByte(): Uint8 {
-    return this.bus.read(
-      NAME_TABLE_ADDRESS_OFFSET +
-        this.registers.baseNameTableId() * 0x0400 +
-        this.backgroundPatternIndex()
-    );
-  }
-
-  private readBackgroundPatternLine(address: Uint16): Uint8 {
-    const offset = this.registers.backgroundPatternTableAddressBanked
-      ? 0x1000
-      : 0x0000;
-    return this.bus.read(offset + address);
-  }
-
   private readColorCodeForBackground(index: Uint8): Uint8 {
     return this.bus.read(0x3f00 + index);
   }
@@ -340,17 +353,6 @@ export default class Ppu {
 
   private readOamData(): Uint8 {
     return this.spriteRam.read(this.registers.oamAddress);
-  }
-
-  private readPaletteId(): number {
-    return (this.readAttribute() >> (this.blockPositionId() * 2)) & 0b11;
-  }
-
-  private readSpritePatternLine(address: Uint16): Uint8 {
-    const offset = this.registers.spritePatternTableAddressBanked
-      ? 0x1000
-      : 0x0000;
-    return this.bus.read(offset + address);
   }
 
   private readStatus(): Uint8 {
