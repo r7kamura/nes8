@@ -237,6 +237,7 @@ export default class Ppu {
   private fetchAttributeTableByte(): Uint8 {
     return this.bus.read(
       0x23c0 +
+        this.registers.baseNameTableId() * 0x0400 +
         this.attributeIndex() +
         this.patternPagingOffset()
     );
