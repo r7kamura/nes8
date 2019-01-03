@@ -165,7 +165,7 @@ export default class Ppu {
   }
 
   private drawBackground8pixels() {
-    const patternIndex = this.readBackgroundPatternIndex();
+    const patternIndex = this.fetchNameTableByte();
     const patternLineLowAddress =
       TILE_HEIGHT * 2 * patternIndex + this.yInTile();
     const patternLineLowByte = this.readBackgroundPatternLine(
@@ -291,7 +291,7 @@ export default class Ppu {
     return this.bus.read(0x23c0 + this.attributeIndex());
   }
 
-  private readBackgroundPatternIndex(): Uint16 {
+  private fetchNameTableByte(): Uint8 {
     return this.bus.read(
       NAME_TABLE_ADDRESS_OFFSET +
         this.registers.baseNameTableId() * 0x0400 +
