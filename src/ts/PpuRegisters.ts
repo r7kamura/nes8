@@ -121,7 +121,7 @@ export default class PpuRegisters {
     if (this.latch) {
       this.videoRamAddress = value + (this.buffer << 8);
     } else {
-      this.buffer = value;
+      this.buffer = value & 0b00111111;
     }
     this.latch = !this.latch;
   }
