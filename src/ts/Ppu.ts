@@ -7,26 +7,22 @@ import PpuRegisters from "./PpuRegisters";
 import Ram from "./Ram";
 import { Uint16, Uint8 } from "./types";
 
-const ATTRIBUTE_TABLE_ELEMENT_HEIGHT = 32;
-const ATTRIBUTE_TABLE_ELEMENT_WIDTH = 32;
-
-const BLOCK_HEIGHT = 16;
-const BLOCK_WIDTH = 16;
-
 const TILE_HEIGHT = 8;
 const TILE_WIDTH = 8;
 
 const WINDOW_HEIGHT = 240;
 const WINDOW_WIDTH = 256;
 
-const H_BLANK_LENGTH = 101;
-const V_BLANK_LENGTH = 21;
-
 const SPRITES_RAM_BYTESIZE = 256;
 
 export default class Ppu {
+  // 0 - 340
   private cycle: number;
 
+  // Frame counter to switch behavior by even/odd.
+  private frame: number;
+
+  // 0 - 261
   private line: number;
 
   private image: Image;
@@ -35,29 +31,48 @@ export default class Ppu {
 
   private spriteRam: Ram;
 
-  private videoRamReadingBuffer: Uint8;
+  // Uint64
+  private tileData: number;
+
+  // For $2007 PPUDATA.
+  private bufferedData: Uint8;
+
+  // For background temporary values.
+  private attributeByte: Uint8;
+  private highTileByte: Uint8;
+  private lowTileByte: Uint8;
+  private nameTableByte: Uint8;
+
+  private nmiDelay: number;
+  private nmiPrevious: boolean;
 
   constructor(
     private bus: PpuBus,
     private interruptLine: InterruptLine,
     private renderer: IRenderer
   ) {
-    this.cycle = 0;
+    this.cycle = 240;
+    this.frame = 0;
+    this.line = 340;
+
     this.image = new Image(WINDOW_WIDTH, WINDOW_HEIGHT);
-    this.line = 0;
     this.registers = new PpuRegisters();
     this.spriteRam = new Ram(SPRITES_RAM_BYTESIZE);
-    this.videoRamReadingBuffer = 0x00;
+    this.tileData = 0;
+
+    this.bufferedData = 0;
+
+    this.attributeByte = 0;
+    this.highTileByte = 0;
+    this.lowTileByte = 0;
+    this.nameTableByte = 0;
+
+    this.nmiDelay = 0;
+    this.nmiPrevious = false;
   }
 
   public read(address: Uint16): Uint8 {
     switch (address) {
-      case 0x0000: {
-        return this.readControl();
-      }
-      case 0x0001: {
-        return this.readMask();
-      }
       case 0x0002: {
         return this.readStatus();
       }
@@ -73,31 +88,50 @@ export default class Ppu {
     }
   }
 
+  // Executes 1 PPU cycle.
   public step() {
-    if (this.onDrawableCycle()) {
-      this.drawBackground8pixels();
-    }
-    if (this.onRightEndCycle()) {
-      this.cycle = 0;
-      if (this.onBottomEndLine()) {
-        this.line = 0;
-        this.interruptLine.nmi = false;
-        this.registers.spriteHit = false;
-        this.registers.inVBlank = false;
-        this.drawSprites();
-        this.renderImage();
-      } else {
-        this.line++;
-        this.registers.spriteHit = this.onSpriteHit();
-        if (this.onLineToStartVBlank()) {
-          this.registers.inVBlank = true;
-          if (this.registers.vBlankInterruptEnabled) {
-            this.interruptLine.nmi = true;
-          }
+    this.tick();
+
+    const renderingEnabled =
+      this.registers.backgroundEnabled || this.registers.spriteEnabled;
+    const onVisibleLine = this.line < 240;
+    const onPreRenderLine = this.line === 261;
+    const onRenderLine = onPreRenderLine || onVisibleLine;
+    const onVisibleCycle = this.cycle >= 1 && this.cycle <= 256;
+    const onPreFetchCycle = this.cycle >= 321 && this.cycle <= 336;
+    const onFetchCycle = onPreFetchCycle || onVisibleCycle;
+
+    if (renderingEnabled) {
+      if (onVisibleLine && onVisibleCycle) {
+        this.renderPixel();
+      }
+      if (onRenderLine && onFetchCycle) {
+        this.updateBackgroundRelatedData();
+      }
+      if (onPreRenderLine && this.cycle >= 280 && this.cycle <= 304) {
+        this.copyY();
+      }
+      if (onRenderLine) {
+        if (onFetchCycle && this.cycle % 8 === 0) {
+          this.incrementX();
+        }
+        if (this.cycle === 256) {
+          this.incrementY();
+        } else if (this.cycle === 257) {
+          this.copyX();
         }
       }
-    } else {
-      this.cycle++;
+    }
+
+    if (this.line === 241 && this.cycle === 1) {
+      this.setVBlank();
+      this.renderImage();
+    }
+
+    if (onPreRenderLine && this.cycle === 1) {
+      this.clearVBlank();
+      this.registers.spriteHit = false;
+      this.registers.spriteOverflow = false;
     }
   }
 
@@ -142,186 +176,135 @@ export default class Ppu {
     }
   }
 
-  // @return {Integer} 0-63
-  private attributeIndex(): number {
-    return (this.yOfAttributeTable() % 8) * 8 + (this.xOfAttributeTable() % 8);
-  }
-
-  private backgroundPatternIndex(): number {
-    return (
-      (this.yOfTile() % 30) * 32 +
-      (this.xOfTile() % 32) +
-      this.patternPagingOffset()
-    );
-  }
-
-  private blockPositionIndex(): number {
-    return (this.xOfBlock() % 2) + (this.yOfBlock() % 2) * 2;
-  }
-
-  private drawBackground8pixels() {
-    const patternIndex = this.fetchNameTableByte();
-    const patternLineLowAddress =
-      TILE_HEIGHT * 2 * patternIndex + this.yInTile();
-    const patternLineLowByte = this.fetchBackgroundPatternLine(
-      patternLineLowAddress
-    );
-    const patternLineHighByte = this.fetchBackgroundPatternLine(
-      patternLineLowAddress + TILE_HEIGHT
-    );
-    const paletteId = this.fetchPaletteId();
-    for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
-      const patternLineByteIndex = TILE_WIDTH - 1 - xInPattern;
-      const paletteIndex =
-        (getBit(patternLineLowByte, patternLineByteIndex) ? 1 : 0) |
-        ((getBit(patternLineHighByte, patternLineByteIndex) ? 1 : 0) << 1) |
-        (paletteId << 2);
-      this.image.write(
-        this.x() + xInPattern,
-        this.y(),
-        this.readColorCodeForBackground(paletteIndex)
+  // 0-15
+  private backgroundPaletteIndex(): number {
+    if (this.registers.backgroundEnabled) {
+      return (
+        (this.tileData >> (4 * (TILE_WIDTH + 7 - this.registers.fineXScroll))) &
+        0b1111
       );
+    } else {
+      return 0;
     }
   }
 
-  private drawSprites() {
-    for (
-      let baseAddress = 0;
-      baseAddress < SPRITES_RAM_BYTESIZE;
-      baseAddress += 4
-    ) {
-      const spriteY = this.spriteRam.read(baseAddress);
-      const patternIndex = this.spriteRam.read(baseAddress + 1);
-      const attributeByte = this.spriteRam.read(baseAddress + 2);
-      const spriteX = this.spriteRam.read(baseAddress + 3);
+  private clearCoarseXScroll() {
+    this.registers.currentVideoRamAddress &= 0b1111111111100000;
+  }
 
-      const paletteId = attributeByte & 0b11;
-      const reversedHorizontally = getBit(attributeByte, 6);
-      const reversedVertically = getBit(attributeByte, 7);
+  private clearFineYScroll() {
+    this.registers.currentVideoRamAddress &= 0b1000111111111111;
+  }
 
-      for (let yInPattern = 0; yInPattern < TILE_HEIGHT; yInPattern++) {
-        const patternLineLowByteAddress =
-          TILE_HEIGHT * 2 * patternIndex + yInPattern;
-        const patternLineHighByteAddress =
-          patternLineLowByteAddress + TILE_HEIGHT;
-        const patternLineLowByte = this.fetchSpritePatternLine(
-          patternLineLowByteAddress
-        );
-        const patternLineHighByte = this.fetchSpritePatternLine(
-          patternLineHighByteAddress
-        );
-        for (let xInPattern = 0; xInPattern < TILE_WIDTH; xInPattern++) {
-          const patternLineByteIndex = TILE_WIDTH - 1 - xInPattern;
-          const paletteIndex =
-            (getBit(patternLineLowByte, patternLineByteIndex) ? 1 : 0) |
-            ((getBit(patternLineHighByte, patternLineByteIndex) ? 1 : 0) << 1) |
-            (paletteId << 2);
-          if (paletteIndex % 4 !== 0) {
-            this.image.write(
-              spriteX +
-                (reversedHorizontally
-                  ? TILE_WIDTH - 1 - xInPattern
-                  : xInPattern),
-              spriteY +
-                (reversedVertically
-                  ? TILE_HEIGHT - 1 - yInPattern
-                  : yInPattern),
-              this.readColorCodeForSprite(paletteIndex)
-            );
-          }
+  private clearVBlank() {
+    this.registers.inVBlank = false;
+    this.nmiChange();
+  }
+
+  private coarseXScroll(): number {
+    return this.registers.currentVideoRamAddress & 0b11111;
+  }
+
+  private coarseYScroll(): number {
+    return (this.registers.currentVideoRamAddress >> 5) & 0b11111;
+  }
+
+  // Copies horizontal information from temporary VRAM address to current VRAM address,
+  // such as coarse X scroll and horizontal bit of name table select.
+  private copyX() {
+    this.registers.currentVideoRamAddress =
+      (this.registers.currentVideoRamAddress & 0b1111101111100000) |
+      (this.registers.temporaryVideoRamAddress & 0b0000010000011111);
+  }
+
+  // Copies vertical information from temporary VRAM address to current VRAM address,
+  // such as fine Y scroll, coarse Y scroll, and vertical bit of name table select.
+  private copyY() {
+    this.registers.currentVideoRamAddress =
+      (this.registers.currentVideoRamAddress & 0b1000010000011111) |
+      (this.registers.temporaryVideoRamAddress & 0b0111101111100000);
+  }
+
+  private fetchAttributeTableByte(): Uint8 {
+    const v = this.registers.currentVideoRamAddress;
+    const address =
+      0x23c0 |
+      (v & 0b0000110000000000) |
+      ((v >> 4) & 0b111000) |
+      ((v >> 2) & 0b111);
+    return this.bus.read(address);
+  }
+
+  private fetchHighTileByte(): Uint8 {
+    return this.bus.read(this.lowTileByteAddress() + TILE_HEIGHT);
+  }
+
+  private fetchLowTileByte(): Uint8 {
+    return this.bus.read(this.lowTileByteAddress());
+  }
+
+  private fetchNameTableByte(): Uint8 {
+    const address = 0x2000 | (this.registers.currentVideoRamAddress & 0x0fff);
+    return this.bus.read(address);
+  }
+
+  private fineYScroll(): number {
+    return (this.registers.currentVideoRamAddress >> 12) & 0b111;
+  }
+
+  // Moves X-position by 8 px.
+  private incrementX() {
+    if (this.coarseXScroll() === 31) {
+      this.clearCoarseXScroll();
+      this.toggleHorizontalNameTableSelect();
+    } else {
+      this.registers.currentVideoRamAddress++;
+    }
+  }
+
+  // Moves Y-position by 1 px.
+  private incrementY() {
+    if (this.fineYScroll() < 7) {
+      this.registers.currentVideoRamAddress += 0b0001000000000000;
+    } else {
+      this.clearFineYScroll();
+      const coarseYScroll = this.coarseYScroll();
+      switch (coarseYScroll) {
+        case 29: {
+          this.setCoarseYScroll(0);
+          this.toggleVerticalNameTableSelect();
+          break;
+        }
+        case 31: {
+          this.setCoarseYScroll(0);
+          break;
+        }
+        default: {
+          this.setCoarseYScroll(coarseYScroll + 1);
         }
       }
     }
   }
 
-  private fetchAttributeTableByte(): Uint8 {
-    return this.bus.read(
-      0x23c0 +
-        this.registers.baseNameTableId() * 0x0400 +
-        this.attributeIndex() +
-        this.patternPagingOffset()
-    );
-  }
-
-  private fetchBackgroundPatternLine(address: Uint16): Uint8 {
-    return this.bus.read(
-      (this.registers.backgroundPatternTableAddressBanked ? 0x1000 : 0x0000) +
-        address
-    );
-  }
-
-  private fetchNameTableByte(): Uint8 {
-    return this.bus.read(
-      0x2000 +
-        this.registers.baseNameTableId() * 0x0400 +
-        this.nameIndex() +
-        this.patternPagingOffset()
-    );
-  }
-
-  private fetchPaletteId(): number {
+  private lowTileByteAddress(): Uint16 {
     return (
-      (this.fetchAttributeTableByte() >> (this.blockPositionIndex() * 2)) & 0b11
+      (this.registers.backgroundPatternTableAddressBanked ? 0x1000 : 0) +
+      this.nameTableByte * TILE_HEIGHT * 2 +
+      this.fineYScroll()
     );
   }
 
-  private fetchSpritePatternLine(address: Uint16): Uint8 {
-    const offset = this.registers.spritePatternTableAddressBanked
-      ? 0x1000
-      : 0x0000;
-    return this.bus.read(offset + address);
-  }
-
-  private inVisibleWindow(): boolean {
-    return (
-      this.x() >= 0 &&
-      this.x() < WINDOW_WIDTH &&
-      this.y() >= 0 &&
-      this.y() < WINDOW_HEIGHT
-    );
-  }
-
-  private nameIndex(): number {
-    return (this.yOfTile() % 30) * 32 + (this.xOfTile() % 32);
-  }
-
-  private onBottomEndLine(): boolean {
-    return this.line === WINDOW_HEIGHT + V_BLANK_LENGTH - 1;
-  }
-
-  private onDrawableCycle(): boolean {
-    return this.inVisibleWindow() && this.x() % 8 === 0;
-  }
-
-  private onLineToStartVBlank(): boolean {
-    return this.line === WINDOW_HEIGHT;
-  }
-
-  private onRightEndCycle(): boolean {
-    return this.cycle === WINDOW_WIDTH + H_BLANK_LENGTH - 1;
-  }
-
-  private onSpriteHit(): boolean {
-    return (
-      this.spriteRam.read(0) === this.yWithScroll() &&
-      this.registers.backgroundEnabled &&
-      this.registers.spriteEnabled
-    );
+  private nmiChange() {
+    const nmi =
+      this.registers.vBlankInterruptEnabled && this.registers.inVBlank;
+    if (nmi && !this.nmiPrevious) {
+      this.nmiDelay = 15;
+    }
+    this.nmiPrevious = nmi;
   }
 
   private paletteDataRequested(): boolean {
-    return this.registers.videoRamAddress % 0x4000 >= 0x3f00;
-  }
-
-  private patternPage(): number {
-    return (
-      (this.xWithScroll() >= WINDOW_WIDTH ? 1 : 0) +
-      (this.yWithScroll() >= WINDOW_HEIGHT ? 2 : 0)
-    );
-  }
-
-  private patternPagingOffset(): number {
-    return this.patternPage() * 0x0400;
+    return this.registers.currentVideoRamAddress % 0x4000 >= 0x3f00;
   }
 
   private readColorCodeForBackground(index: Uint8): Uint8 {
@@ -337,16 +320,16 @@ export default class Ppu {
   }
 
   private readData(): Uint8 {
-    const readValue = this.bus.read(this.registers.videoRamAddress);
+    const readValue = this.bus.read(this.registers.currentVideoRamAddress);
     let returnedValue;
     if (this.paletteDataRequested()) {
       returnedValue = readValue;
-      this.videoRamReadingBuffer = this.bus.read(
-        this.registers.videoRamAddress - 0x1000
+      this.bufferedData = this.bus.read(
+        this.registers.currentVideoRamAddress - 0x1000
       );
     } else {
-      returnedValue = this.videoRamReadingBuffer;
-      this.videoRamReadingBuffer = readValue;
+      returnedValue = this.bufferedData;
+      this.bufferedData = readValue;
     }
     this.registers.incrementVideoRamAddress();
     return returnedValue;
@@ -361,19 +344,132 @@ export default class Ppu {
   }
 
   private readStatus(): Uint8 {
-    return this.registers.getStatus();
+    const value = this.registers.getStatus();
+    this.nmiChange();
+    return value;
   }
 
   private renderImage() {
     this.renderer.render(this.image);
   }
 
+  private renderPixel() {
+    const x = this.cycle - 1;
+    const y = this.line;
+    const backgroundPaletteIndex =
+      x >= 8 || this.registers.leftBackgroundEnabled
+        ? this.backgroundPaletteIndex()
+        : 0;
+    const colorCode = this.readColorCodeForBackground(backgroundPaletteIndex);
+    this.image.write(x, y, colorCode);
+  }
+
+  private setCoarseYScroll(value: number) {
+    this.registers.currentVideoRamAddress =
+      (this.registers.currentVideoRamAddress & 0b1111110000011111) |
+      (value << 5);
+  }
+
+  private setVBlank() {
+    this.registers.inVBlank = true;
+    this.nmiChange();
+  }
+
+  private storeTileData() {
+    let tileData = 0;
+    const v = this.registers.currentVideoRamAddress;
+    const shift = ((v >> 4) & 0b100) | (v & 0b10);
+    const attributeMask = ((this.attributeByte >> shift) & 0b11) << 2;
+    for (let i = 0; i < TILE_WIDTH; i++) {
+      const bit1Mask = (this.lowTileByte & 0b10000000) >> 7;
+      const bit2Mask = (this.highTileByte & 0b10000000) >> 6;
+      this.lowTileByte <<= 1;
+      this.highTileByte <<= 1;
+      tileData <<= 4;
+      tileData |= attributeMask | bit2Mask | bit1Mask;
+    }
+    this.tileData |= tileData;
+  }
+
+  // Updates cycle, line, and frame.
+  private tick() {
+    if (this.nmiDelay > 0) {
+      this.nmiDelay--;
+      if (
+        this.nmiDelay === 0 &&
+        this.registers.vBlankInterruptEnabled &&
+        this.registers.inVBlank
+      ) {
+        this.interruptLine.nmi = true;
+      }
+    }
+
+    if (
+      (this.registers.backgroundEnabled || this.registers.spriteEnabled) &&
+      this.frame % 2 === 1 &&
+      this.line === 261 &&
+      this.cycle === 339
+    ) {
+      this.cycle = 0;
+      this.line = 0;
+      this.frame++;
+      return;
+    }
+    this.cycle++;
+    if (this.cycle > 340) {
+      this.cycle = 0;
+      this.line++;
+      if (this.line > 261) {
+        this.line = 0;
+        this.frame++;
+      }
+    }
+  }
+
+  private toggleHorizontalNameTableSelect() {
+    this.registers.currentVideoRamAddress ^= 0b0000010000000000;
+  }
+
+  private toggleVerticalNameTableSelect() {
+    this.registers.currentVideoRamAddress ^= 0b0000100000000000;
+  }
+
+  private updateBackgroundRelatedData() {
+    this.tileData <<= 4;
+    switch (this.cycle % 8) {
+      case 0: {
+        this.storeTileData();
+        break;
+      }
+      case 1: {
+        this.nameTableByte = this.fetchNameTableByte();
+        break;
+      }
+      case 3: {
+        this.attributeByte = this.fetchAttributeTableByte();
+        break;
+      }
+      case 5: {
+        this.lowTileByte = this.fetchLowTileByte();
+        break;
+      }
+      case 7: {
+        this.highTileByte = this.fetchHighTileByte();
+        break;
+      }
+    }
+  }
+
   private writeControl(value: Uint8) {
     this.registers.control = value;
+    this.nmiChange();
+    this.registers.temporaryVideoRamAddress =
+      (this.registers.temporaryVideoRamAddress & 0b1111001111111111) |
+      ((value & 0b00000011) << 10);
   }
 
   private writeData(value: Uint8) {
-    this.bus.write(this.registers.videoRamAddress, value);
+    this.bus.write(this.registers.currentVideoRamAddress, value);
     this.registers.incrementVideoRamAddress();
   }
 
@@ -391,58 +487,10 @@ export default class Ppu {
   }
 
   private writeScroll(value: Uint8) {
-    this.registers.scroll = value;
+    this.registers.writeScroll(value);
   }
 
   private writeVideoRamAddress(value: Uint8) {
-    this.registers.setVideoRamAddress(value);
-  }
-
-  private x(): number {
-    return this.cycle - 1;
-  }
-
-  private xInTile(): number {
-    return this.xWithScroll() % TILE_WIDTH;
-  }
-
-  private xOfAttributeTable(): number {
-    return Math.floor(this.xWithScroll() / ATTRIBUTE_TABLE_ELEMENT_WIDTH);
-  }
-
-  private xOfBlock(): number {
-    return Math.floor(this.xWithScroll() / BLOCK_WIDTH);
-  }
-
-  private xOfTile(): number {
-    return Math.floor(this.xWithScroll() / TILE_WIDTH);
-  }
-
-  private xWithScroll(): number {
-    return this.x() + this.registers.scrollX;
-  }
-
-  private y(): number {
-    return this.line;
-  }
-
-  private yInTile(): number {
-    return this.yWithScroll() % TILE_HEIGHT;
-  }
-
-  private yOfAttributeTable(): number {
-    return Math.floor(this.yWithScroll() / ATTRIBUTE_TABLE_ELEMENT_HEIGHT);
-  }
-
-  private yOfBlock(): number {
-    return Math.floor(this.yWithScroll() / BLOCK_HEIGHT);
-  }
-
-  private yOfTile(): number {
-    return Math.floor(this.yWithScroll() / TILE_HEIGHT);
-  }
-
-  private yWithScroll(): number {
-    return this.y() + this.registers.scrollY;
+    this.registers.writeVideoRamAddress(value);
   }
 }
