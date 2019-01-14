@@ -14,6 +14,7 @@ const WINDOW_HEIGHT = 240;
 const WINDOW_WIDTH = 256;
 
 const SPRITES_RAM_BYTESIZE = 256;
+const MAX_SPRITES_COUNT = 64;
 
 export default class Ppu {
   // 0 - 340
@@ -46,6 +47,14 @@ export default class Ppu {
   private nmiDelay: number;
   private nmiPrevious: boolean;
 
+  private spriteIndexes: number[];
+  private spritePatterns: number[];
+  private spritePositions: number[];
+  private spritePriorities: number[];
+
+  // How many sprites will be rendered in the next scanline (0-8).
+  private spritesCount: number;
+
   constructor(
     private bus: PpuBus,
     private interruptLine: InterruptLine,
@@ -69,6 +78,12 @@ export default class Ppu {
 
     this.nmiDelay = 0;
     this.nmiPrevious = false;
+
+    this.spriteIndexes = [];
+    this.spritePatterns = [];
+    this.spritePositions = [];
+    this.spritePriorities = [];
+    this.spritesCount = 0;
   }
 
   public read(address: Uint16): Uint8 {
@@ -119,6 +134,14 @@ export default class Ppu {
           this.incrementY();
         } else if (this.cycle === 257) {
           this.copyX();
+        }
+      }
+
+      if (this.cycle === 257) {
+        if (onVisibleLine) {
+          this.evaluateSprites();
+        } else {
+          this.spritesCount = 0;
         }
       }
     }
@@ -180,8 +203,8 @@ export default class Ppu {
   private backgroundPaletteIndex(): number {
     if (this.registers.backgroundEnabled) {
       return (
-        (this.tileData >> (4 * (TILE_WIDTH + 7 - this.registers.fineXScroll))) &
-        0b1111
+        // (this.tileData >> (4 * (TILE_WIDTH + 7 - this.registers.fineXScroll))) &
+        (this.tileData >> (4 * (TILE_WIDTH + 7 - 0))) & 0b1111
       );
     } else {
       return 0;
@@ -223,6 +246,69 @@ export default class Ppu {
     this.registers.currentVideoRamAddress =
       (this.registers.currentVideoRamAddress & 0b1000010000011111) |
       (this.registers.temporaryVideoRamAddress & 0b0111101111100000);
+  }
+
+  // Scans which sprites to render on the next scanline during visible scanlines.
+  // See https://wiki.nesdev.com/w/index.php/PPU_sprite_evaluation for more details.
+  private evaluateSprites() {
+    const spriteHeight = this.spriteHeight();
+    let spritesCount = 0;
+    for (let i = 0; i < MAX_SPRITES_COUNT; i++) {
+      const y = this.spriteRam.read(i * 4 + 0);
+      const patternIndex = this.spriteRam.read(i * 4 + 1);
+      const attributes = this.spriteRam.read(i * 4 + 2);
+      const x = this.spriteRam.read(i * 4 + 3);
+      let rowInPattern = this.line - y;
+      if (rowInPattern < 0 || rowInPattern >= spriteHeight) {
+        continue; // Because this sprite is not related to this scanline.
+      }
+      if (spritesCount < 8) {
+        const verticallyMirrored = (attributes & 0b10000000) === 0b10000000;
+        const horizontallyMirrored = (attributes & 0b01000000) === 0b01000000;
+        if (verticallyMirrored) {
+          rowInPattern = spriteHeight - 1 - rowInPattern;
+        }
+        const address =
+          (this.registers.spritePatternTableAddressBanked ? 0x1000 : 0) +
+          patternIndex * TILE_HEIGHT * 2 +
+          rowInPattern;
+        let lowTileByte = this.bus.read(address);
+        let highTileByte = this.bus.read(address + TILE_HEIGHT);
+        const attributeMask = (attributes & 0b11) << 2;
+        let tileData = 0;
+        for (let j = 0; j < TILE_WIDTH; j++) {
+          let bitMask1;
+          let bitMask2;
+          if (horizontallyMirrored) {
+            bitMask1 = lowTileByte & 1;
+            bitMask2 = (highTileByte & 1) << 1;
+            lowTileByte >>= 1;
+            highTileByte >>= 1;
+          } else {
+            bitMask1 = (lowTileByte & 0b10000000) >> 7;
+            bitMask2 = (highTileByte & 0b10000000) >> 6;
+            lowTileByte <<= 1;
+            highTileByte <<= 1;
+          }
+          tileData <<= 4;
+          tileData |= attributeMask | bitMask2 | bitMask1;
+        }
+        this.spritePatterns[spritesCount] = tileData;
+        this.spritePositions[spritesCount] = x;
+        this.spritePriorities[spritesCount] = (attributes >> 5) & 1;
+        this.spriteIndexes[spritesCount] = i;
+      }
+      spritesCount++;
+    }
+    if (spritesCount > 8) {
+      this.registers.spriteOverflow = true;
+    }
+    this.spritesCount = spritesCount > 8 ? 8 : spritesCount;
+  }
+
+  // Selects sprite size from 8x8 or 8x16 and returns its height.
+  private spriteHeight(): number {
+    return this.registers.spriteTall ? 16 : 8;
   }
 
   private fetchAttributeTableByte(): Uint8 {
@@ -307,12 +393,8 @@ export default class Ppu {
     return this.registers.currentVideoRamAddress % 0x4000 >= 0x3f00;
   }
 
-  private readColorCodeForBackground(index: Uint8): Uint8 {
+  private readColorCode(index: Uint8): Uint8 {
     return this.bus.read(0x3f00 + index);
-  }
-
-  private readColorCodeForSprite(index: Uint8): Uint8 {
-    return this.bus.read(0x3f10 + index);
   }
 
   private readControl(): Uint8 {
@@ -360,8 +442,34 @@ export default class Ppu {
       x >= 8 || this.registers.leftBackgroundEnabled
         ? this.backgroundPaletteIndex()
         : 0;
-    const colorCode = this.readColorCodeForBackground(backgroundPaletteIndex);
-    this.image.write(x, y, colorCode);
+    const sprite = this.spritePaletteIndex();
+    const i = sprite[0];
+    const spritePaletteIndex =
+      x >= 8 || this.registers.leftSpriteEnabled ? sprite[1] : 0;
+    let index: number;
+    const b = backgroundPaletteIndex % 4 !== 0;
+    const s = spritePaletteIndex % 4 !== 0;
+    if (b) {
+      if (s) {
+        if (this.spriteIndexes[i] === 0 && x < 255) {
+          this.registers.spriteHit = true;
+        }
+        if (this.spritePriorities[i] === 0) {
+          index = spritePaletteIndex | 0x10;
+        } else {
+          index = backgroundPaletteIndex;
+        }
+      } else {
+        index = backgroundPaletteIndex;
+      }
+    } else {
+      if (s) {
+        index = spritePaletteIndex | 0x10;
+      } else {
+        index = 0;
+      }
+    }
+    this.image.write(x, y, this.readColorCode(index));
   }
 
   private setCoarseYScroll(value: number) {
@@ -373,6 +481,25 @@ export default class Ppu {
   private setVBlank() {
     this.registers.inVBlank = true;
     this.nmiChange();
+  }
+
+  // @returns {number} An Integer from 0 to 15.
+  private spritePaletteIndex(): [number, number] {
+    if (this.registers.spriteEnabled) {
+      for (let i = 0; i < this.spritesCount; i++) {
+        const offset = this.cycle - 1 - this.spritePositions[i];
+        if (offset < 0 || offset > 7) {
+          continue;
+        }
+        const paletteIndex =
+          (this.spritePatterns[i] >> ((7 - offset) * 4)) & 0b1111;
+        if (paletteIndex % 4 === 0) {
+          continue;
+        }
+        return [i, paletteIndex];
+      }
+    }
+    return [0, 0];
   }
 
   private storeTileData() {
