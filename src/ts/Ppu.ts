@@ -32,8 +32,9 @@ export default class Ppu {
 
   private spriteRam: Ram;
 
-  // Uint64
-  private tileData: number;
+  // Represents Uint64 by 2 number instances.
+  private tileData1: number;
+  private tileData2: number;
 
   // For $2007 PPUDATA.
   private bufferedData: Uint8;
@@ -67,7 +68,8 @@ export default class Ppu {
     this.image = new Image(WINDOW_WIDTH, WINDOW_HEIGHT);
     this.registers = new PpuRegisters();
     this.spriteRam = new Ram(SPRITES_RAM_BYTESIZE);
-    this.tileData = 0;
+    this.tileData1 = 0;
+    this.tileData2 = 0;
 
     this.bufferedData = 0;
 
@@ -203,8 +205,7 @@ export default class Ppu {
   private backgroundPaletteIndex(): number {
     if (this.registers.backgroundEnabled) {
       return (
-        // (this.tileData >> (4 * (TILE_WIDTH + 7 - this.registers.fineXScroll))) &
-        (this.tileData >> (4 * (TILE_WIDTH + 7 - 0))) & 0b1111
+        (this.tileData2 >> ((7 - this.registers.fineXScroll) * 4)) & 0b1111
       );
     } else {
       return 0;
@@ -515,7 +516,7 @@ export default class Ppu {
       tileData <<= 4;
       tileData |= attributeMask | bit2Mask | bit1Mask;
     }
-    this.tileData |= tileData;
+    this.tileData1 = tileData;
   }
 
   // Updates cycle, line, and frame.
@@ -562,7 +563,9 @@ export default class Ppu {
   }
 
   private updateBackgroundRelatedData() {
-    this.tileData <<= 4;
+    this.tileData2 <<= 4;
+    this.tileData2 |= (this.tileData1 >> 28) & 0b1111;
+    this.tileData1 <<= 4;
     switch (this.cycle % 8) {
       case 0: {
         this.storeTileData();
