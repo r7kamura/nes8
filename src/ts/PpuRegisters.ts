@@ -5,7 +5,7 @@ const enum PpuControlIndex {
   HorizontalIncrement = 2,
   SpritePatternTableAddressBanked,
   BackgroundPatternTableAddressBanked,
-  SpriteSize,
+  SpriteTall,
   MasterSlave,
   VBlankIrqEnabled
 }
@@ -86,6 +86,10 @@ export default class PpuRegisters {
     return getBit(this.mask, PpuMaskIndex.LeftBackgroundEnabled);
   }
 
+  get leftSpriteEnabled(): boolean {
+    return getBit(this.mask, PpuMaskIndex.LeftSpriteEnabled);
+  }
+
   get spriteEnabled(): boolean {
     return getBit(this.mask, PpuMaskIndex.SpriteEnabled);
   }
@@ -103,6 +107,10 @@ export default class PpuRegisters {
       this.control,
       PpuControlIndex.SpritePatternTableAddressBanked
     );
+  }
+
+  get spriteTall(): boolean {
+    return getBit(this.control, PpuControlIndex.SpriteTall);
   }
 
   get vBlankInterruptEnabled(): boolean {
