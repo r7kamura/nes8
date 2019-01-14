@@ -3,13 +3,17 @@ import { Uint16, Uint8 } from "./types";
 
 const enum PpuControlIndex {
   HorizontalIncrement = 2,
-  SpritePatternTableAddressBanked = 3,
-  BackgroundPatternTableAddressBanked = 4,
-  VBlankIrqEnabled = 7
+  SpritePatternTableAddressBanked,
+  BackgroundPatternTableAddressBanked,
+  SpriteSize,
+  MasterSlave,
+  VBlankIrqEnabled
 }
 
 const enum PpuMaskIndex {
-  BackgroundEnabled = 3,
+  LeftBackgroundEnabled = 1,
+  LeftSpriteEnabled,
+  BackgroundEnabled,
   SpriteEnabled
 }
 
@@ -26,31 +30,33 @@ export default class PpuRegisters {
 
   public oamAddress: Uint8;
 
-  public scrollX: Uint8;
+  // 15 bits
+  // yyy NN YYYYY XXXXX
+  // ||| || ||||| +++++-- coarse X scroll
+  // ||| || +++++-------- coarse Y scroll
+  // ||| ++-------------- nametable select
+  // +++----------------- fine Y scroll
+  public currentVideoRamAddress: Uint16;
 
-  public scrollY: Uint8;
+  // 15 bits
+  public temporaryVideoRamAddress: Uint16;
 
-  public videoRamAddress: Uint16;
-
-  private buffer: Uint8;
-
-  private latch: boolean;
+  // 3 bits
+  public fineXScroll: Uint8;
 
   private status: Uint8;
 
+  private writeToggle: boolean;
+
   constructor() {
     this.control = 0;
+    this.currentVideoRamAddress = 0;
+    this.fineXScroll = 0;
     this.mask = 0;
-    this.status = 0;
-
-    this.scrollX = 0;
-    this.scrollY = 0;
-
     this.oamAddress = 0;
-    this.videoRamAddress = 0;
-
-    this.buffer = 0;
-    this.latch = false;
+    this.status = 0;
+    this.temporaryVideoRamAddress = 0;
+    this.writeToggle = false;
   }
 
   get backgroundEnabled(): boolean {
@@ -68,18 +74,16 @@ export default class PpuRegisters {
     return getBit(this.control, PpuControlIndex.HorizontalIncrement);
   }
 
+  get inVBlank(): boolean {
+    return getBit(this.status, PpuStatusIndex.InVBlank);
+  }
+
   set inVBlank(value: boolean) {
     this.status = composeBit(this.status, PpuStatusIndex.InVBlank, value);
   }
 
-  set scroll(value: Uint8) {
-    if (this.latch) {
-      this.scrollX = this.buffer;
-      this.scrollY = value;
-    } else {
-      this.buffer = value;
-    }
-    this.latch = !this.latch;
+  get leftBackgroundEnabled(): boolean {
+    return getBit(this.mask, PpuMaskIndex.LeftBackgroundEnabled);
   }
 
   get spriteEnabled(): boolean {
@@ -88,6 +92,10 @@ export default class PpuRegisters {
 
   set spriteHit(value: boolean) {
     this.status = composeBit(this.status, PpuStatusIndex.SpriteHit, value);
+  }
+
+  set spriteOverflow(value: boolean) {
+    this.status = composeBit(this.status, PpuStatusIndex.SpriteOverflow, value);
   }
 
   get spritePatternTableAddressBanked(): boolean {
@@ -109,20 +117,40 @@ export default class PpuRegisters {
   public getStatus(): Uint8 {
     const value = this.status;
     this.inVBlank = false;
-    this.latch = false;
+    this.writeToggle = false;
     return value;
   }
 
   public incrementVideoRamAddress() {
-    this.videoRamAddress += this.horizontalIncrement ? 32 : 1;
+    this.currentVideoRamAddress += this.horizontalIncrement ? 32 : 1;
   }
 
-  public setVideoRamAddress(value: Uint8) {
-    if (this.latch) {
-      this.videoRamAddress = value + (this.buffer << 8);
+  public writeScroll(value: Uint8) {
+    if (this.writeToggle) {
+      this.temporaryVideoRamAddress =
+        (this.temporaryVideoRamAddress & 0b1000111111111111) |
+        ((value & 0b00000111) << 12);
+      this.temporaryVideoRamAddress =
+        (this.temporaryVideoRamAddress & 0b1111110000011111) |
+        ((value & 0b11111000) << 2);
     } else {
-      this.buffer = value & 0b00111111;
+      this.temporaryVideoRamAddress =
+        (this.temporaryVideoRamAddress & 0b1111111111100000) | (value >> 3);
+      this.fineXScroll = value & 0b00000111;
     }
-    this.latch = !this.latch;
+    this.writeToggle = !this.writeToggle;
+  }
+
+  public writeVideoRamAddress(value: Uint8) {
+    if (this.writeToggle) {
+      this.temporaryVideoRamAddress =
+        (this.temporaryVideoRamAddress & 0b1111111100000000) | value;
+      this.currentVideoRamAddress = this.temporaryVideoRamAddress;
+    } else {
+      this.temporaryVideoRamAddress =
+        (this.temporaryVideoRamAddress & 0b1000000011111111) |
+        ((value & 0b00111111) << 8);
+    }
+    this.writeToggle = !this.writeToggle;
   }
 }
