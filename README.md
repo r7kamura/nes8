@@ -1,5 +1,8 @@
 # Nes8
 
+> [!NOTE]
+> This project is archived because I no longer actively use it, and there seems to be no recent activity from other users either. If you are still using it and would like to take over maintenance, please contact me somewhere.
+
 [![CircleCI](https://circleci.com/gh/r7kamura/nes8.svg?style=svg)](https://circleci.com/gh/r7kamura/workflows/nes8)
 
 A NES emulator written in TypeScript.
